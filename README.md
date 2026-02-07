@@ -55,3 +55,10 @@ File uploads:
 
 - Swagger UI: `/api/docs`
 - OpenAPI spec: `/api/openapi.json`
+
+## Docker (app + nginx)
+
+- Build & run: `docker-compose up --build`
+- App: http://localhost:3000 (from app container)
+- Nginx (proxy + static storage): http://localhost:8080
+- Static storage served at `/storage/...` via nginx, shared from `public/storage`.
