@@ -35,6 +35,9 @@ FIREBASE_CREDENTIALS_PATH="dharma-flow-firebase-adminsdk-fbsvc-5b2a510c72.json" 
 FIREBASE_WEB_API_KEY="<public-web-api-key>" # needed for auth register/login proxy
 ```
 
+File uploads:
+- Profile images are stored under `public/storage/user-images`. Ensure this path is writable in your deploy target, or adjust as needed.
+
 ## Scripts
 
 - `pnpm run dev` — start with nodemon

@@ -15,21 +15,24 @@ describe('Auth routes', () => {
     expect(res.body.message).toMatch(/required/);
   });
 
-  it('POST /api/auth/register proxies to firebase signUp', async () => {
+  it('POST /api/auth/register proxies to firebase signUp with username/birthday', async () => {
     const res = await request(app)
       .post('/api/auth/register')
-      .send({ email: 'test@example.com', password: 'secret123' });
+      .send({ email: 'test@example.com', password: 'secret123', username: 'tester', birthday: '2000-01-01' });
 
     expect(res.status).toBe(200);
     expect(res.body.uid).toBe('test-user');
+    expect(res.body.username).toBe('tester');
+    expect(res.body.birthday).toBe('2000-01-01T00:00:00.000Z');
   });
 
   it('POST /api/auth/login proxies to firebase signIn', async () => {
     const res = await request(app)
       .post('/api/auth/login')
-      .send({ email: 'test@example.com', password: 'secret123' });
+      .send({ email: 'test@example.com', password: 'secret123', username: 'tester', birthday: '2000-01-01' });
 
     expect(res.status).toBe(200);
     expect(res.body.uid).toBe('test-user');
+    expect(res.body.username).toBe('tester');
   });
 });

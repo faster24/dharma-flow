@@ -4,13 +4,26 @@ const setAuthService = (svc) => {
   authService = svc;
 };
 
+const parseBirthday = (birthday) => {
+  if (!birthday) return undefined;
+  const date = new Date(birthday);
+  return Number.isNaN(date.getTime()) ? null : date;
+};
+
 const ensureCredentials = (req, res) => {
-  const { email, password } = req.body || {};
-  if (!email || !password) {
-    res.status(400).json({ message: 'email and password are required' });
+  const { email, password, username, birthday } = req.body || {};
+  if (!email || !password || !username) {
+    res.status(400).json({ message: 'email, password and username are required' });
     return null;
   }
-  return { email, password };
+
+  const parsedBirthday = parseBirthday(birthday);
+  if (birthday && parsedBirthday === null) {
+    res.status(400).json({ message: 'birthday must be YYYY-MM-DD' });
+    return null;
+  }
+
+  return { email, password, username, birthday: parsedBirthday };
 };
 
 const register = async (req, res) => {
@@ -24,15 +37,19 @@ const register = async (req, res) => {
         idToken: 'fake-token',
         refreshToken: 'fake-refresh',
         email: creds.email,
+        username: creds.username,
+        birthday: creds.birthday,
       });
     }
 
-    const result = await authService.signUp(creds.email, creds.password);
+    const result = await authService.signUp(creds.email, creds.password, creds.username, creds.birthday);
     res.json({
       uid: result.localId,
       idToken: result.idToken,
       refreshToken: result.refreshToken,
       email: result.email,
+      username: creds.username,
+      birthday: creds.birthday,
     });
   } catch (err) {
     res.status(err.status || 500).json({ message: err.message, error: err.details });
@@ -50,6 +67,8 @@ const login = async (req, res) => {
         idToken: 'fake-token',
         refreshToken: 'fake-refresh',
         email: creds.email,
+        username: creds.username,
+        birthday: creds.birthday,
       });
     }
 
@@ -59,6 +78,8 @@ const login = async (req, res) => {
       idToken: result.idToken,
       refreshToken: result.refreshToken,
       email: result.email,
+      username: creds.username,
+      birthday: creds.birthday,
     });
   } catch (err) {
     res.status(err.status || 500).json({ message: err.message, error: err.details });

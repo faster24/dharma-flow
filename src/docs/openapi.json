@@ -109,6 +109,9 @@
           "400": {
             "description": "Invalid input"
           },
+          "409": {
+            "description": "Username conflict"
+          },
           "500": {
             "description": "Server error"
           }
@@ -147,6 +150,70 @@
           }
         }
       }
+    },
+    "/api/profile": {
+      "get": {
+        "summary": "Get authenticated profile",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Authenticated user profile",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update profile (username, birthday, photo)",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/ProfileUpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "409": {
+            "description": "Username conflict"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -182,7 +249,9 @@
               "uid": { "type": "string" },
               "email": { "type": "string", "format": "email" },
               "displayName": { "type": "string" },
-              "photoURL": { "type": "string" }
+              "photoURL": { "type": "string" },
+              "username": { "type": "string" },
+              "birthday": { "type": "string", "format": "date" }
             },
             "additionalProperties": true
           }
@@ -190,10 +259,12 @@
       },
       "AuthRequest": {
         "type": "object",
-        "required": ["email", "password"],
+        "required": ["email", "password", "username"],
         "properties": {
           "email": { "type": "string", "format": "email", "example": "user@example.com" },
-          "password": { "type": "string", "example": "secret123" }
+          "password": { "type": "string", "example": "secret123" },
+          "username": { "type": "string", "example": "myusername" },
+          "birthday": { "type": "string", "format": "date", "example": "2000-01-01" }
         }
       },
       "AuthResponse": {
@@ -202,7 +273,17 @@
           "uid": { "type": "string", "example": "firebase-uid" },
           "idToken": { "type": "string", "description": "JWT for authenticated calls" },
           "refreshToken": { "type": "string" },
-          "email": { "type": "string", "format": "email" }
+          "email": { "type": "string", "format": "email" },
+          "username": { "type": "string" },
+          "birthday": { "type": "string", "format": "date" }
+        }
+      },
+      "ProfileUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "username": { "type": "string", "example": "newname" },
+          "birthday": { "type": "string", "format": "date", "example": "2000-01-01" },
+          "image": { "type": "string", "format": "binary" }
         }
       }
     }
