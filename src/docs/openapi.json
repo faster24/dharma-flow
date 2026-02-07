@@ -3,7 +3,7 @@
   "info": {
     "title": "DharmaFlow API",
     "version": "1.0.0",
-    "description": "Express API with Firebase Auth and MongoDB"
+    "description": "Express API with Firebase Auth, MongoDB, and sutra/category content"
   },
   "servers": [
     {
@@ -60,64 +60,53 @@
     "/api/profile": {
       "get": {
         "summary": "Get authenticated profile",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+        "description": "Returns the stored profile; 404 if the user record is missing.",
+        "security": [ { "bearerAuth": [] } ],
         "responses": {
           "200": {
             "description": "Authenticated user profile",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProfileResponse"
-                }
-              }
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ProfileResponse" } } }
+          },
+          "404": { "description": "User not found" },
+          "401": { "description": "Unauthorized" }
+        }
+      },
+      "patch": {
+        "summary": "Update profile (username, birthday, photo)",
+        "description": "Updates profile fields and optional photo. Requires existing user.",
+        "security": [ { "bearerAuth": [] } ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "multipart/form-data": {
+              "schema": { "$ref": "#/components/schemas/ProfileUpdateRequest" }
             }
-          },
-          "404": {
-            "description": "User not found"
-          },
-          "401": {
-            "description": "Unauthorized"
           }
+        },
+        "responses": {
+          "200": { "description": "Updated user", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ProfileResponse" } } } },
+          "400": { "description": "Invalid input" },
+          "404": { "description": "User not found" },
+          "409": { "description": "Username conflict" },
+          "401": { "description": "Unauthorized" }
         }
       }
     },
     "/api/auth/register": {
       "post": {
-        "summary": "Register user via Firebase Auth",
+        "summary": "Register user via Firebase Auth and persist profile",
+        "description": "Creates a Firebase user and stores username/birthday in MongoDB.",
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AuthRequest"
-              }
-            }
+            "application/json": { "schema": { "$ref": "#/components/schemas/AuthRequest" } }
           }
         },
         "responses": {
-          "200": {
-            "description": "Registration success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AuthResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid input"
-          },
-          "409": {
-            "description": "Username conflict"
-          },
-          "500": {
-            "description": "Server error"
-          }
+          "200": { "description": "Registration success", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AuthResponse" } } } },
+          "400": { "description": "Invalid input" },
+          "409": { "description": "Username conflict" },
+          "500": { "description": "Server error" }
         }
       }
     },
@@ -126,98 +115,160 @@
         "summary": "Login user via Firebase Auth",
         "requestBody": {
           "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AuthRequest"
-              }
-            }
-          }
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AuthRequest" } } }
         },
         "responses": {
-          "200": {
-            "description": "Login success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AuthResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid input"
-          },
-          "500": {
-            "description": "Server error"
-          }
+          "200": { "description": "Login success", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AuthResponse" } } } },
+          "400": { "description": "Invalid input" },
+          "500": { "description": "Server error" }
         }
       }
     },
-    "/api/profile": {
+    "/api/categories": {
       "get": {
-        "summary": "Get authenticated profile",
-        "security": [
-          {
-            "bearerAuth": []
-          }
+        "summary": "List categories (public)",
+        "parameters": [
+          { "in": "query", "name": "search", "schema": { "type": "string" } },
+          { "in": "query", "name": "page", "schema": { "type": "integer", "default": 1 } },
+          { "in": "query", "name": "limit", "schema": { "type": "integer", "default": 20 } }
         ],
         "responses": {
           "200": {
-            "description": "Authenticated user profile",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProfileResponse"
-                }
+            "description": "Category list",
+            "content": { "application/json": { "schema": {
+              "type": "object",
+              "properties": {
+                "items": { "type": "array", "items": { "$ref": "#/components/schemas/Category" } },
+                "total": { "type": "integer" },
+                "page": { "type": "integer" },
+                "limit": { "type": "integer" }
               }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
+            }}}
           }
         }
       },
-      "patch": {
-        "summary": "Update profile (username, birthday, photo)",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+      "post": {
+        "summary": "Create category (auth)",
+        "security": [ { "bearerAuth": [] } ],
         "requestBody": {
-          "required": false,
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "$ref": "#/components/schemas/ProfileUpdateRequest"
-              }
-            }
-          }
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CategoryCreate" } } }
         },
         "responses": {
+          "201": { "description": "Created", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CategoryResponse" } } } },
+          "400": { "description": "Invalid input" },
+          "409": { "description": "Duplicate category" },
+          "401": { "description": "Unauthorized" }
+        }
+      }
+    },
+    "/api/categories/{id}": {
+      "get": {
+        "summary": "Get category (public)",
+        "parameters": [ { "in": "path", "name": "id", "required": true, "schema": { "type": "string" } } ],
+        "responses": {
+          "200": { "description": "Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CategoryResponse" } } } },
+          "404": { "description": "Not found" }
+        }
+      },
+      "patch": {
+        "summary": "Update category (auth)",
+        "security": [ { "bearerAuth": [] } ],
+        "parameters": [ { "in": "path", "name": "id", "required": true, "schema": { "type": "string" } } ],
+        "requestBody": {
+          "required": false,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CategoryUpdate" } } }
+        },
+        "responses": {
+          "200": { "description": "Updated", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CategoryResponse" } } } },
+          "404": { "description": "Not found" },
+          "409": { "description": "Duplicate category" },
+          "401": { "description": "Unauthorized" }
+        }
+      },
+      "delete": {
+        "summary": "Delete category (auth)",
+        "description": "If sutras exist, category is soft-deleted.",
+        "security": [ { "bearerAuth": [] } ],
+        "parameters": [ { "in": "path", "name": "id", "required": true, "schema": { "type": "string" } } ],
+        "responses": {
+          "200": { "description": "Deleted or soft-deleted" },
+          "404": { "description": "Not found" },
+          "401": { "description": "Unauthorized" }
+        }
+      }
+    },
+    "/api/sutras": {
+      "get": {
+        "summary": "List sutras (public)",
+        "parameters": [
+          { "in": "query", "name": "category", "schema": { "type": "string" } },
+          { "in": "query", "name": "search", "schema": { "type": "string" } },
+          { "in": "query", "name": "tag", "schema": { "type": "string" } },
+          { "in": "query", "name": "page", "schema": { "type": "integer", "default": 1 } },
+          { "in": "query", "name": "limit", "schema": { "type": "integer", "default": 20 } }
+        ],
+        "responses": {
           "200": {
-            "description": "Updated user",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProfileResponse"
-                }
+            "description": "Sutra list",
+            "content": { "application/json": { "schema": {
+              "type": "object",
+              "properties": {
+                "items": { "type": "array", "items": { "$ref": "#/components/schemas/Sutra" } },
+                "total": { "type": "integer" },
+                "page": { "type": "integer" },
+                "limit": { "type": "integer" }
               }
-            }
-          },
-          "400": {
-            "description": "Invalid input"
-          },
-          "404": {
-            "description": "User not found"
-          },
-          "409": {
-            "description": "Username conflict"
-          },
-          "401": {
-            "description": "Unauthorized"
+            }}}
           }
+        }
+      },
+      "post": {
+        "summary": "Create sutra (auth)",
+        "security": [ { "bearerAuth": [] } ],
+        "requestBody": {
+          "required": true,
+          "content": { "multipart/form-data": { "schema": { "$ref": "#/components/schemas/SutraCreate" } } }
+        },
+        "responses": {
+          "201": { "description": "Created", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SutraResponse" } } } },
+          "400": { "description": "Invalid input or missing category" },
+          "401": { "description": "Unauthorized" }
+        }
+      }
+    },
+    "/api/sutras/{id}": {
+      "get": {
+        "summary": "Get sutra (public)",
+        "parameters": [ { "in": "path", "name": "id", "required": true, "schema": { "type": "string" } } ],
+        "responses": {
+          "200": { "description": "Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SutraResponse" } } } },
+          "404": { "description": "Not found" }
+        }
+      },
+      "patch": {
+        "summary": "Update sutra (auth)",
+        "security": [ { "bearerAuth": [] } ],
+        "parameters": [ { "in": "path", "name": "id", "required": true, "schema": { "type": "string" } } ],
+        "requestBody": {
+          "required": false,
+          "content": { "multipart/form-data": { "schema": { "$ref": "#/components/schemas/SutraUpdate" } } }
+        },
+        "responses": {
+          "200": { "description": "Updated", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SutraResponse" } } } },
+          "400": { "description": "Invalid input or missing category" },
+          "404": { "description": "Not found" },
+          "401": { "description": "Unauthorized" }
+        }
+      },
+      "delete": {
+        "summary": "Delete sutra (auth)",
+        "security": [ { "bearerAuth": [] } ],
+        "parameters": [ { "in": "path", "name": "id", "required": true, "schema": { "type": "string" } } ],
+        "responses": {
+          "200": { "description": "Deleted" },
+          "404": { "description": "Not found" },
+          "401": { "description": "Unauthorized" }
         }
       }
     }
@@ -290,6 +341,77 @@
           "username": { "type": "string", "example": "newname" },
           "birthday": { "type": "string", "format": "date", "example": "2000-01-01" },
           "image": { "type": "string", "format": "binary" }
+        }
+      },
+      "Category": {
+        "type": "object",
+        "properties": {
+          "_id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "isDeleted": { "type": "boolean" }
+        }
+      },
+      "CategoryCreate": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "CategoryUpdate": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "CategoryResponse": {
+        "type": "object",
+        "properties": {
+          "category": { "$ref": "#/components/schemas/Category" }
+        }
+      },
+      "Sutra": {
+        "type": "object",
+        "properties": {
+          "_id": { "type": "string" },
+          "title": { "type": "string" },
+          "content": { "type": "string" },
+          "summary": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "thumbnailUrl": { "type": "string" },
+          "category": { "$ref": "#/components/schemas/Category" }
+        }
+      },
+      "SutraCreate": {
+        "type": "object",
+        "required": ["title", "content", "category"],
+        "properties": {
+          "title": { "type": "string" },
+          "content": { "type": "string" },
+          "summary": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "category": { "type": "string" },
+          "thumbnail": { "type": "string", "format": "binary" }
+        }
+      },
+      "SutraUpdate": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string" },
+          "content": { "type": "string" },
+          "summary": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "category": { "type": "string" },
+          "thumbnail": { "type": "string", "format": "binary" }
+        }
+      },
+      "SutraResponse": {
+        "type": "object",
+        "properties": {
+          "sutra": { "$ref": "#/components/schemas/Sutra" }
         }
       }
     }

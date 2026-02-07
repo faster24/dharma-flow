@@ -14,6 +14,8 @@ const app = express();
 // ensure public storage path exists
 const storageDir = path.join(process.cwd(), 'public', 'storage', 'user-images');
 fs.mkdirSync(storageDir, { recursive: true });
+const sutraThumbDir = path.join(process.cwd(), 'public', 'storage', 'sutra-thumbs');
+fs.mkdirSync(sutraThumbDir, { recursive: true });
 
 app.use(helmet());
 app.use(cors());

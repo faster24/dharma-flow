@@ -1,3 +1,4 @@
+const User = require('../models/User');
 let authService = require('../services/firebaseAuth');
 
 const setAuthService = (svc) => {
@@ -48,14 +49,21 @@ const register = async (req, res) => {
     }
 
     const result = await authService.signUp(creds.email, creds.password, creds.username, creds.birthday);
-
-    await User.create({
-      uid: result.localId,
-      email: creds.email,
-      username: creds.username.trim(),
-      birthday: creds.birthday,
-      displayName: creds.username,
-    });
+    try {
+      await User.create({
+        uid: result.localId,
+        email: creds.email,
+        username: creds.username.trim(),
+        birthday: creds.birthday,
+        displayName: creds.username,
+      });
+    } catch (dbErr) {
+      // surface DB validation/unique errors
+      if (dbErr.code === 11000) {
+        return res.status(409).json({ message: 'username already taken' });
+      }
+      return res.status(500).json({ message: 'Failed to save user', error: dbErr.message });
+    }
 
     res.json({
       uid: result.localId,
