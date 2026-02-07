@@ -5,6 +5,7 @@ const { randomUUID } = require('crypto');
 
 const PROFILE_DIR = path.join(process.cwd(), 'public', 'storage', 'user-images');
 const SUTRA_DIR = path.join(process.cwd(), 'public', 'storage', 'sutra-thumbs');
+const SUTRA_AUDIO_DIR = path.join(process.cwd(), 'public', 'storage', 'sutra-audio');
 
 const saveProfileImage = async (buffer, mimetype) => {
   const id = randomUUID();
@@ -37,4 +38,5 @@ const saveSutraThumbnail = async (buffer, mimetype) => {
 module.exports = {
   saveProfileImage,
   saveSutraThumbnail,
+  SUTRA_AUDIO_DIR,
 };

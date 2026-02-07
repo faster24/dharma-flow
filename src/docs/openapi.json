@@ -3,13 +3,10 @@
   "info": {
     "title": "DharmaFlow API",
     "version": "1.0.0",
-    "description": "Express API with Firebase Auth, MongoDB, and sutra/category content"
+    "description": "Express API with Firebase Auth, MongoDB, sutras, categories"
   },
   "servers": [
-    {
-      "url": "http://localhost:3000",
-      "description": "Local dev"
-    }
+    { "url": "http://localhost:3000", "description": "Local dev" }
   ],
   "paths": {
     "/api/health": {
@@ -17,16 +14,7 @@
         "summary": "Health check",
         "tags": ["Utility"],
         "responses": {
-          "200": {
-            "description": "Service status",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HealthResponse"
-                }
-              }
-            }
-          }
+          "200": { "description": "Service status", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/HealthResponse" } } } }
         }
       }
     },
@@ -34,59 +22,30 @@
       "post": {
         "summary": "Echo payload",
         "tags": ["Utility"],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "additionalProperties": true
-              }
-            }
-          }
-        },
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object", "additionalProperties": true } } } },
         "responses": {
-          "200": {
-            "description": "Echoed payload",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EchoResponse"
-                }
-              }
-            }
-          }
+          "200": { "description": "Echoed payload", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/EchoResponse" } } } }
         }
       }
     },
     "/api/profile": {
       "get": {
         "summary": "Get authenticated profile",
+        "description": "Returns the stored profile; 404 if missing.",
         "tags": ["Profile"],
-        "description": "Returns the stored profile; 404 if the user record is missing.",
-        "security": [ { "bearerAuth": [] } ],
+        "security": [{ "bearerAuth": [] }],
         "responses": {
-          "200": {
-            "description": "Authenticated user profile",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ProfileResponse" } } }
-          },
+          "200": { "description": "Authenticated user profile", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ProfileResponse" } } } },
           "404": { "description": "User not found" },
           "401": { "description": "Unauthorized" }
         }
       },
       "patch": {
         "summary": "Update profile (username, birthday, photo)",
+        "description": "Requires existing user.",
         "tags": ["Profile"],
-        "description": "Updates profile fields and optional photo. Requires existing user.",
-        "security": [ { "bearerAuth": [] } ],
-        "requestBody": {
-          "required": false,
-          "content": {
-            "multipart/form-data": {
-              "schema": { "$ref": "#/components/schemas/ProfileUpdateRequest" }
-            }
-          }
-        },
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": { "content": { "multipart/form-data": { "schema": { "$ref": "#/components/schemas/ProfileUpdateRequest" } } } },
         "responses": {
           "200": { "description": "Updated user", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ProfileResponse" } } } },
           "400": { "description": "Invalid input" },
@@ -100,13 +59,7 @@
       "post": {
         "summary": "Register user via Firebase Auth and persist profile",
         "tags": ["Auth"],
-        "description": "Creates a Firebase user and stores username/birthday in MongoDB.",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": { "schema": { "$ref": "#/components/schemas/AuthRequest" } }
-          }
-        },
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AuthRequest" } } } },
         "responses": {
           "200": { "description": "Registration success", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AuthResponse" } } } },
           "400": { "description": "Invalid input" },
@@ -119,10 +72,7 @@
       "post": {
         "summary": "Login user via Firebase Auth",
         "tags": ["Auth"],
-        "requestBody": {
-          "required": true,
-          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AuthRequest" } } }
-        },
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AuthRequest" } } } },
         "responses": {
           "200": { "description": "Login success", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AuthResponse" } } } },
           "400": { "description": "Invalid input" },
@@ -140,28 +90,14 @@
           { "in": "query", "name": "limit", "schema": { "type": "integer", "default": 20 } }
         ],
         "responses": {
-          "200": {
-            "description": "Category list",
-            "content": { "application/json": { "schema": {
-              "type": "object",
-              "properties": {
-                "items": { "type": "array", "items": { "$ref": "#/components/schemas/Category" } },
-                "total": { "type": "integer" },
-                "page": { "type": "integer" },
-                "limit": { "type": "integer" }
-              }
-            }}}
-          }
+          "200": { "description": "Category list", "content": { "application/json": { "schema": { "type": "object", "properties": { "items": { "type": "array", "items": { "$ref": "#/components/schemas/Category" } }, "total": { "type": "integer" }, "page": { "type": "integer" }, "limit": { "type": "integer" } } } } } }
         }
       },
       "post": {
         "summary": "Create category (auth)",
         "tags": ["Categories"],
-        "security": [ { "bearerAuth": [] } ],
-        "requestBody": {
-          "required": true,
-          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CategoryCreate" } } }
-        },
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CategoryCreate" } } } },
         "responses": {
           "201": { "description": "Created", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CategoryResponse" } } } },
           "400": { "description": "Invalid input" },
@@ -174,21 +110,15 @@
       "get": {
         "summary": "Get category (public)",
         "tags": ["Categories"],
-        "parameters": [ { "in": "path", "name": "id", "required": true, "schema": { "type": "string" } } ],
-        "responses": {
-          "200": { "description": "Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CategoryResponse" } } } },
-          "404": { "description": "Not found" }
-        }
+        "parameters": [{ "in": "path", "name": "id", "required": true, "schema": { "type": "string" } }],
+        "responses": { "200": { "description": "Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CategoryResponse" } } } }, "404": { "description": "Not found" } }
       },
       "patch": {
         "summary": "Update category (auth)",
         "tags": ["Categories"],
-        "security": [ { "bearerAuth": [] } ],
-        "parameters": [ { "in": "path", "name": "id", "required": true, "schema": { "type": "string" } } ],
-        "requestBody": {
-          "required": false,
-          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CategoryUpdate" } } }
-        },
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "in": "path", "name": "id", "required": true, "schema": { "type": "string" } }],
+        "requestBody": { "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CategoryUpdate" } } } },
         "responses": {
           "200": { "description": "Updated", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CategoryResponse" } } } },
           "404": { "description": "Not found" },
@@ -198,10 +128,10 @@
       },
       "delete": {
         "summary": "Delete category (auth)",
-        "tags": ["Categories"],
         "description": "If sutras exist, category is soft-deleted.",
-        "security": [ { "bearerAuth": [] } ],
-        "parameters": [ { "in": "path", "name": "id", "required": true, "schema": { "type": "string" } } ],
+        "tags": ["Categories"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "in": "path", "name": "id", "required": true, "schema": { "type": "string" } }],
         "responses": {
           "200": { "description": "Deleted or soft-deleted" },
           "404": { "description": "Not found" },
@@ -217,32 +147,19 @@
           { "in": "query", "name": "category", "schema": { "type": "string" } },
           { "in": "query", "name": "search", "schema": { "type": "string" } },
           { "in": "query", "name": "tag", "schema": { "type": "string" } },
+          { "in": "query", "name": "type", "schema": { "type": "string", "enum": ["text", "audio"] } },
           { "in": "query", "name": "page", "schema": { "type": "integer", "default": 1 } },
           { "in": "query", "name": "limit", "schema": { "type": "integer", "default": 20 } }
         ],
         "responses": {
-          "200": {
-            "description": "Sutra list",
-            "content": { "application/json": { "schema": {
-              "type": "object",
-              "properties": {
-                "items": { "type": "array", "items": { "$ref": "#/components/schemas/Sutra" } },
-                "total": { "type": "integer" },
-                "page": { "type": "integer" },
-                "limit": { "type": "integer" }
-              }
-            }}}
-          }
+          "200": { "description": "Sutra list", "content": { "application/json": { "schema": { "type": "object", "properties": { "items": { "type": "array", "items": { "$ref": "#/components/schemas/Sutra" } }, "total": { "type": "integer" }, "page": { "type": "integer" }, "limit": { "type": "integer" } } } } } }
         }
       },
       "post": {
         "summary": "Create sutra (auth)",
         "tags": ["Sutras"],
-        "security": [ { "bearerAuth": [] } ],
-        "requestBody": {
-          "required": true,
-          "content": { "multipart/form-data": { "schema": { "$ref": "#/components/schemas/SutraCreate" } } }
-        },
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": { "required": true, "content": { "multipart/form-data": { "schema": { "$ref": "#/components/schemas/SutraCreate" } } } },
         "responses": {
           "201": { "description": "Created", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SutraResponse" } } } },
           "400": { "description": "Invalid input or missing category" },
@@ -254,21 +171,15 @@
       "get": {
         "summary": "Get sutra (public)",
         "tags": ["Sutras"],
-        "parameters": [ { "in": "path", "name": "id", "required": true, "schema": { "type": "string" } } ],
-        "responses": {
-          "200": { "description": "Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SutraResponse" } } } },
-          "404": { "description": "Not found" }
-        }
+        "parameters": [{ "in": "path", "name": "id", "required": true, "schema": { "type": "string" } }],
+        "responses": { "200": { "description": "Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SutraResponse" } } } }, "404": { "description": "Not found" } }
       },
       "patch": {
         "summary": "Update sutra (auth)",
         "tags": ["Sutras"],
-        "security": [ { "bearerAuth": [] } ],
-        "parameters": [ { "in": "path", "name": "id", "required": true, "schema": { "type": "string" } } ],
-        "requestBody": {
-          "required": false,
-          "content": { "multipart/form-data": { "schema": { "$ref": "#/components/schemas/SutraUpdate" } } }
-        },
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "in": "path", "name": "id", "required": true, "schema": { "type": "string" } }],
+        "requestBody": { "content": { "multipart/form-data": { "schema": { "$ref": "#/components/schemas/SutraUpdate" } } } },
         "responses": {
           "200": { "description": "Updated", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SutraResponse" } } } },
           "400": { "description": "Invalid input or missing category" },
@@ -279,8 +190,8 @@
       "delete": {
         "summary": "Delete sutra (auth)",
         "tags": ["Sutras"],
-        "security": [ { "bearerAuth": [] } ],
-        "parameters": [ { "in": "path", "name": "id", "required": true, "schema": { "type": "string" } } ],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "in": "path", "name": "id", "required": true, "schema": { "type": "string" } }],
         "responses": {
           "200": { "description": "Deleted" },
           "404": { "description": "Not found" },
@@ -291,27 +202,11 @@
   },
   "components": {
     "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
-      }
+      "bearerAuth": { "type": "http", "scheme": "bearer", "bearerFormat": "JWT" }
     },
     "schemas": {
-      "HealthResponse": {
-        "type": "object",
-        "properties": {
-          "status": { "type": "string", "example": "ok" },
-          "uptime": { "type": "number", "example": 12.34 }
-        }
-      },
-      "EchoResponse": {
-        "type": "object",
-        "properties": {
-          "data": { "type": "object", "additionalProperties": true },
-          "message": { "type": "string", "example": "echo" }
-        }
-      },
+      "HealthResponse": { "type": "object", "properties": { "status": { "type": "string", "example": "ok" }, "uptime": { "type": "number", "example": 12.34 } } },
+      "EchoResponse": { "type": "object", "properties": { "data": { "type": "object", "additionalProperties": true }, "message": { "type": "string", "example": "echo" } } },
       "ProfileResponse": {
         "type": "object",
         "properties": {
@@ -368,27 +263,9 @@
           "isDeleted": { "type": "boolean" }
         }
       },
-      "CategoryCreate": {
-        "type": "object",
-        "required": ["name"],
-        "properties": {
-          "name": { "type": "string" },
-          "description": { "type": "string" }
-        }
-      },
-      "CategoryUpdate": {
-        "type": "object",
-        "properties": {
-          "name": { "type": "string" },
-          "description": { "type": "string" }
-        }
-      },
-      "CategoryResponse": {
-        "type": "object",
-        "properties": {
-          "category": { "$ref": "#/components/schemas/Category" }
-        }
-      },
+      "CategoryCreate": { "type": "object", "required": ["name"], "properties": { "name": { "type": "string" }, "description": { "type": "string" } } },
+      "CategoryUpdate": { "type": "object", "properties": { "name": { "type": "string" }, "description": { "type": "string" } } },
+      "CategoryResponse": { "type": "object", "properties": { "category": { "$ref": "#/components/schemas/Category" } } },
       "Sutra": {
         "type": "object",
         "properties": {
@@ -398,19 +275,23 @@
           "summary": { "type": "string" },
           "tags": { "type": "array", "items": { "type": "string" } },
           "thumbnailUrl": { "type": "string" },
+          "audioUrl": { "type": "string" },
+          "type": { "type": "string", "enum": ["text", "audio"] },
           "category": { "$ref": "#/components/schemas/Category" }
         }
       },
       "SutraCreate": {
         "type": "object",
-        "required": ["title", "content", "category"],
+        "required": ["title", "content", "category", "type"],
         "properties": {
           "title": { "type": "string" },
           "content": { "type": "string" },
           "summary": { "type": "string" },
           "tags": { "type": "array", "items": { "type": "string" } },
           "category": { "type": "string" },
-          "thumbnail": { "type": "string", "format": "binary" }
+          "type": { "type": "string", "enum": ["text", "audio"] },
+          "thumbnail": { "type": "string", "format": "binary" },
+          "audio": { "type": "string", "format": "binary", "description": "Required when type=audio." }
         }
       },
       "SutraUpdate": {
@@ -421,15 +302,12 @@
           "summary": { "type": "string" },
           "tags": { "type": "array", "items": { "type": "string" } },
           "category": { "type": "string" },
-          "thumbnail": { "type": "string", "format": "binary" }
+          "type": { "type": "string", "enum": ["text", "audio"] },
+          "thumbnail": { "type": "string", "format": "binary" },
+          "audio": { "type": "string", "format": "binary" }
         }
       },
-      "SutraResponse": {
-        "type": "object",
-        "properties": {
-          "sutra": { "$ref": "#/components/schemas/Sutra" }
-        }
-      }
+      "SutraResponse": { "type": "object", "properties": { "sutra": { "$ref": "#/components/schemas/Sutra" } } }
     }
   }
 }

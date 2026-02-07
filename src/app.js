@@ -16,6 +16,8 @@ const storageDir = path.join(process.cwd(), 'public', 'storage', 'user-images');
 fs.mkdirSync(storageDir, { recursive: true });
 const sutraThumbDir = path.join(process.cwd(), 'public', 'storage', 'sutra-thumbs');
 fs.mkdirSync(sutraThumbDir, { recursive: true });
+const sutraAudioDir = path.join(process.cwd(), 'public', 'storage', 'sutra-audio');
+fs.mkdirSync(sutraAudioDir, { recursive: true });
 
 app.use(helmet());
 app.use(cors());

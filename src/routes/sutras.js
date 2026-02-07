@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const auth = require('../middleware/auth');
-const uploadThumb = require('../middleware/uploadThumb');
+const uploadSutraMedia = require('../middleware/uploadSutraMedia');
 const {
   createSutra,
   listSutras,
@@ -13,8 +13,8 @@ const router = Router();
 
 router.get('/', listSutras);
 router.get('/:id', getSutra);
-router.post('/', auth, uploadThumb.single('thumbnail'), createSutra);
-router.patch('/:id', auth, uploadThumb.single('thumbnail'), updateSutra);
+router.post('/', auth, uploadSutraMedia.fields([{ name: 'thumbnail', maxCount: 1 }, { name: 'audio', maxCount: 1 }]), createSutra);
+router.patch('/:id', auth, uploadSutraMedia.fields([{ name: 'thumbnail', maxCount: 1 }, { name: 'audio', maxCount: 1 }]), updateSutra);
 router.delete('/:id', auth, deleteSutra);
 
 module.exports = router;
