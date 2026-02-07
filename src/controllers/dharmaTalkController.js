@@ -36,6 +36,9 @@ const saveAudio = (file) => {
   };
   const ext = extMap[file.mimetype] || 'bin';
   const filename = `${randomUUID()}.${ext}`;
+  if (process.env.TEST_NO_WRITE === 'true') {
+    return `/storage/dharma-audio/${filename}`;
+  }
   const filepath = path.join(AUDIO_DIR, filename);
   fs.writeFileSync(filepath, file.buffer);
   return `/storage/dharma-audio/${filename}`;
