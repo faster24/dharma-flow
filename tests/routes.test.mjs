@@ -35,10 +35,10 @@ describe('API routes', () => {
       email: 'test@example.com',
       displayName: 'Test User',
       photoURL: 'https://example.com/avatar.png',
+      username: 'tester',
     };
 
-    vi.spyOn(User, 'findOne').mockResolvedValue(null);
-    vi.spyOn(User, 'create').mockResolvedValue(stubUser);
+    vi.spyOn(User, 'findOne').mockResolvedValue(stubUser);
 
     const res = await request(app).get('/api/profile');
 
@@ -46,6 +46,5 @@ describe('API routes', () => {
     expect(res.body.authUser.uid).toBe('test-user');
     expect(res.body.user.uid).toBe('test-user');
     expect(User.findOne).toHaveBeenCalledWith({ uid: 'test-user' });
-    expect(User.create).toHaveBeenCalled();
   });
 });

@@ -32,7 +32,11 @@ FIREBASE_PROJECT_ID="your-project-id"
 FIREBASE_CLIENT_EMAIL="firebase-adminsdk@example.iam.gserviceaccount.com"
 FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nREPLACE_WITH_PRIVATE_KEY\n-----END PRIVATE KEY-----\n"
 FIREBASE_CREDENTIALS_PATH="dharma-flow-firebase-adminsdk-fbsvc-5b2a510c72.json" # path to your service account file
+FIREBASE_WEB_API_KEY="<public-web-api-key>" # needed for auth register/login proxy
 ```
+
+File uploads:
+- Profile images are stored under `public/storage/user-images`. Ensure this path is writable in your deploy target, or adjust as needed.
 
 ## Scripts
 
