@@ -4,3 +4,4 @@ node_modules
 pnpm-lock.yaml
 firebase-service-account.json
 dharma-flow-firebase-adminsdk-fbsvc-5b2a510c72.json
+.opencode/
