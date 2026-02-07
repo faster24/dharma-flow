@@ -15,6 +15,11 @@ const updateProfile = async (req, res) => {
   }
 
   try {
+    const existingUser = await User.findOne({ uid: req.user.uid });
+    if (!existingUser) {
+      return res.status(404).json({ message: 'User not found; register first' });
+    }
+
     const updates = {};
 
     if (username) {
@@ -36,8 +41,6 @@ const updateProfile = async (req, res) => {
 
     const user = await User.findOneAndUpdate({ uid: req.user.uid }, updates, {
       new: true,
-      upsert: true,
-      setDefaultsOnInsert: true,
     });
 
     res.json({ user });

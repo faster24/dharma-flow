@@ -12,15 +12,10 @@ const profile = async (req, res) => {
   const { uid, email, name, picture } = req.user || {};
 
   try {
-    let user = await User.findOne({ uid });
+    const user = await User.findOne({ uid });
 
     if (!user) {
-      user = await User.create({
-        uid,
-        email,
-        displayName: name,
-        photoURL: picture,
-      });
+      return res.status(404).json({ message: 'User not found; register first' });
     }
 
     res.json({

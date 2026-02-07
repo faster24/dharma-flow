@@ -9,7 +9,14 @@ import User from '../src/models/User';
 
 describe('Profile routes', () => {
   beforeEach(() => {
-    vi.spyOn(User, 'findOne').mockResolvedValue(null);
+    vi.spyOn(User, 'findOne')
+      .mockResolvedValueOnce({
+        uid: 'test-user',
+        email: 'test@example.com',
+        username: 'oldname',
+        birthday: new Date('1990-01-01'),
+      })
+      .mockResolvedValueOnce(null);
     vi.spyOn(User, 'findOneAndUpdate').mockResolvedValue({
       uid: 'test-user',
       email: 'test@example.com',
@@ -27,5 +34,18 @@ describe('Profile routes', () => {
     expect(res.status).toBe(200);
     expect(res.body.user.username).toBe('newname');
     expect(User.findOneAndUpdate).toHaveBeenCalled();
+  });
+
+  it('PATCH /api/profile returns 404 when user missing', async () => {
+    User.findOne.mockReset();
+    User.findOne.mockResolvedValue(null);
+    User.findOneAndUpdate.mockClear();
+
+    const res = await request(app)
+      .patch('/api/profile')
+      .send({ username: 'newname', birthday: '2000-01-01' });
+
+    expect(res.status).toBe(404);
+    expect(User.findOneAndUpdate).not.toHaveBeenCalled();
   });
 });
