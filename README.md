@@ -40,6 +40,13 @@ FIREBASE_CREDENTIALS_PATH="dharma-flow-firebase-adminsdk-fbsvc-5b2a510c72.json" 
 - `pnpm start` — start
 - `pnpm test -- --runInBand` — vitest + supertest routes
 
+## Deploying to Vercel
+
+- A serverless entrypoint is provided at `api/index.js`; it initializes MongoDB and Firebase once per cold start and reuses connections.
+- `vercel.json` sets Node 18 runtime and rewrites `/` and `/api/*` to the serverless handler.
+- Configure environment variables in Vercel project settings (match `.env`, and set `FIREBASE_CREDENTIALS_PATH` if you upload the service account file as a secret or bundle it). Do **not** commit real secrets.
+- Deploy via `vercel --prod` (or connect the GitHub repo and let Vercel auto-deploy on push).
+
 ## API docs
 
 - Swagger UI: `/api/docs`
