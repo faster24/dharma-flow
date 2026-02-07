@@ -15,6 +15,7 @@
     "/api/health": {
       "get": {
         "summary": "Health check",
+        "tags": ["Utility"],
         "responses": {
           "200": {
             "description": "Service status",
@@ -32,6 +33,7 @@
     "/api/echo": {
       "post": {
         "summary": "Echo payload",
+        "tags": ["Utility"],
         "requestBody": {
           "required": true,
           "content": {
@@ -60,6 +62,7 @@
     "/api/profile": {
       "get": {
         "summary": "Get authenticated profile",
+        "tags": ["Profile"],
         "description": "Returns the stored profile; 404 if the user record is missing.",
         "security": [ { "bearerAuth": [] } ],
         "responses": {
@@ -73,6 +76,7 @@
       },
       "patch": {
         "summary": "Update profile (username, birthday, photo)",
+        "tags": ["Profile"],
         "description": "Updates profile fields and optional photo. Requires existing user.",
         "security": [ { "bearerAuth": [] } ],
         "requestBody": {
@@ -95,6 +99,7 @@
     "/api/auth/register": {
       "post": {
         "summary": "Register user via Firebase Auth and persist profile",
+        "tags": ["Auth"],
         "description": "Creates a Firebase user and stores username/birthday in MongoDB.",
         "requestBody": {
           "required": true,
@@ -113,6 +118,7 @@
     "/api/auth/login": {
       "post": {
         "summary": "Login user via Firebase Auth",
+        "tags": ["Auth"],
         "requestBody": {
           "required": true,
           "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AuthRequest" } } }
@@ -127,6 +133,7 @@
     "/api/categories": {
       "get": {
         "summary": "List categories (public)",
+        "tags": ["Categories"],
         "parameters": [
           { "in": "query", "name": "search", "schema": { "type": "string" } },
           { "in": "query", "name": "page", "schema": { "type": "integer", "default": 1 } },
@@ -149,6 +156,7 @@
       },
       "post": {
         "summary": "Create category (auth)",
+        "tags": ["Categories"],
         "security": [ { "bearerAuth": [] } ],
         "requestBody": {
           "required": true,
@@ -165,6 +173,7 @@
     "/api/categories/{id}": {
       "get": {
         "summary": "Get category (public)",
+        "tags": ["Categories"],
         "parameters": [ { "in": "path", "name": "id", "required": true, "schema": { "type": "string" } } ],
         "responses": {
           "200": { "description": "Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CategoryResponse" } } } },
@@ -173,6 +182,7 @@
       },
       "patch": {
         "summary": "Update category (auth)",
+        "tags": ["Categories"],
         "security": [ { "bearerAuth": [] } ],
         "parameters": [ { "in": "path", "name": "id", "required": true, "schema": { "type": "string" } } ],
         "requestBody": {
@@ -188,6 +198,7 @@
       },
       "delete": {
         "summary": "Delete category (auth)",
+        "tags": ["Categories"],
         "description": "If sutras exist, category is soft-deleted.",
         "security": [ { "bearerAuth": [] } ],
         "parameters": [ { "in": "path", "name": "id", "required": true, "schema": { "type": "string" } } ],
@@ -201,6 +212,7 @@
     "/api/sutras": {
       "get": {
         "summary": "List sutras (public)",
+        "tags": ["Sutras"],
         "parameters": [
           { "in": "query", "name": "category", "schema": { "type": "string" } },
           { "in": "query", "name": "search", "schema": { "type": "string" } },
@@ -225,6 +237,7 @@
       },
       "post": {
         "summary": "Create sutra (auth)",
+        "tags": ["Sutras"],
         "security": [ { "bearerAuth": [] } ],
         "requestBody": {
           "required": true,
@@ -240,6 +253,7 @@
     "/api/sutras/{id}": {
       "get": {
         "summary": "Get sutra (public)",
+        "tags": ["Sutras"],
         "parameters": [ { "in": "path", "name": "id", "required": true, "schema": { "type": "string" } } ],
         "responses": {
           "200": { "description": "Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SutraResponse" } } } },
@@ -248,6 +262,7 @@
       },
       "patch": {
         "summary": "Update sutra (auth)",
+        "tags": ["Sutras"],
         "security": [ { "bearerAuth": [] } ],
         "parameters": [ { "in": "path", "name": "id", "required": true, "schema": { "type": "string" } } ],
         "requestBody": {
@@ -263,6 +278,7 @@
       },
       "delete": {
         "summary": "Delete sutra (auth)",
+        "tags": ["Sutras"],
         "security": [ { "bearerAuth": [] } ],
         "parameters": [ { "in": "path", "name": "id", "required": true, "schema": { "type": "string" } } ],
         "responses": {
