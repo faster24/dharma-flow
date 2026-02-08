@@ -82,7 +82,7 @@ const createTalk = async (req, res) => {
 };
 
 const listTalks = async (req, res) => {
-  const { page = 1, limit = 20, monk, search = '', tag } = req.query;
+  const { page = 1, limit = 20, monk, monkName, search = '', tag } = req.query;
   const query = {};
   if (monk) query.monk = monk;
   if (search)
@@ -91,6 +91,13 @@ const listTalks = async (req, res) => {
       { description: { $regex: search, $options: 'i' } },
     ];
   if (tag) query.tags = tag.toLowerCase();
+
+  if (monkName) {
+    const monkMatches = await Monk.find({ name: { $regex: monkName, $options: 'i' }, isDeleted: false }).select('_id');
+    const ids = monkMatches.map((m) => m._id);
+    if (!ids.length) return res.json({ items: [], total: 0, page: Number(page), limit: Number(limit) });
+    query.monk = { $in: ids };
+  }
 
   const skip = (Number(page) - 1) * Number(limit);
   const [items, total] = await Promise.all([
