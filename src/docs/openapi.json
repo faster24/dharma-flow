@@ -349,10 +349,65 @@
                     "page": { "type": "integer" },
                     "limit": { "type": "integer" }
                   }
-                }
+        }
+      }
+    },
+    "/api/calendar": {
+      "get": {
+        "summary": "Get calendar month",
+        "description": "Returns all days in the requested month with marked boolean.",
+        "tags": ["Calendar"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "in": "query", "name": "month", "required": true, "schema": { "type": "string", "pattern": "^\\d{4}-\\d{2}$", "example": "2026-02" } }
+        ],
+        "responses": {
+          "200": { "description": "Month data" },
+          "400": { "description": "Invalid month" },
+          "401": { "description": "Unauthorized" }
+        }
+      }
+    },
+    "/api/calendar/chant": {
+      "post": {
+        "summary": "Record chanting day",
+        "description": "Idempotent upsert for a given date (YYYY-MM-DD).",
+        "tags": ["Calendar"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": { "date": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" } },
+                "required": ["date"]
               }
             }
+          }
+        },
+        "responses": {
+          "200": { "description": "Recorded" },
+          "400": { "description": "Invalid date" },
+          "401": { "description": "Unauthorized" }
+        }
+      }
+    },
+    "/api/calendar/streak": {
+      "get": {
+        "summary": "Get streak summary",
+        "description": "Current streak is based on server today.",
+        "tags": ["Calendar"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Streak summary"
           },
+          "401": { "description": "Unauthorized" }
+        }
+      }
+    }
+  },
           "401": { "description": "Unauthorized" }
         }
       }
