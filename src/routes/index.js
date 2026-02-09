@@ -9,6 +9,7 @@ const dharmaTalkRoutes = require('./dharmaTalks');
 const categoryRoutes = require('./categories');
 const sutraRoutes = require('./sutras');
 const { search } = require('../controllers/searchController');
+const favoriteRoutes = require('./favorites');
 
 const router = Router();
 
@@ -19,6 +20,7 @@ router.patch('/profile', auth, upload.single('image'), updateProfile);
 router.post('/auth/register', register);
 router.post('/auth/login', login);
 router.get('/search', search);
+router.use('/favorites', favoriteRoutes);
 router.use('/monks', monkRoutes);
 router.use('/dharma-talks', dharmaTalkRoutes);
 router.use('/categories', categoryRoutes);
