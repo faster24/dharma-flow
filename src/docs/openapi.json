@@ -349,6 +349,10 @@
                     "page": { "type": "integer" },
                     "limit": { "type": "integer" }
                   }
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -403,11 +407,6 @@
           "200": {
             "description": "Streak summary"
           },
-          "401": { "description": "Unauthorized" }
-        }
-      }
-    }
-  },
           "401": { "description": "Unauthorized" }
         }
       }
