@@ -4,11 +4,7 @@ const { randomUUID } = require('crypto');
 const Category = require('../models/Category');
 const Sutra = require('../models/Sutra');
 const { saveSutraThumbnail, SUTRA_AUDIO_DIR } = require('../services/imageService');
-
-const normalizeTags = (tags) =>
-  Array.isArray(tags)
-    ? tags.map((t) => (t || '').toString().trim().toLowerCase()).filter(Boolean)
-    : [];
+const { normalizeTags } = require('../utils/validation');
 
 const ensureType = (type) => (['text', 'audio'].includes(type || '') ? type : null);
 

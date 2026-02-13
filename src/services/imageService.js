@@ -2,16 +2,17 @@ const fs = require('fs');
 const path = require('path');
 const sharp = require('sharp');
 const { randomUUID } = require('crypto');
-
-const PROFILE_DIR = path.join(process.cwd(), 'public', 'storage', 'user-images');
-const SUTRA_DIR = path.join(process.cwd(), 'public', 'storage', 'sutra-thumbs');
-const SUTRA_AUDIO_DIR = path.join(process.cwd(), 'public', 'storage', 'sutra-audio');
+const {
+  USER_IMAGES_DIR,
+  SUTRA_THUMBS_DIR,
+  SUTRA_AUDIO_DIR,
+} = require('../config/storage');
 
 const saveProfileImage = async (buffer, mimetype) => {
   const id = randomUUID();
   const ext = mimetype === 'image/webp' ? 'webp' : 'jpg';
   const filename = `${id}.${ext}`;
-  const filepath = path.join(PROFILE_DIR, filename);
+  const filepath = path.join(USER_IMAGES_DIR, filename);
 
   await sharp(buffer)
     .resize({ width: 800, withoutEnlargement: true })
@@ -25,7 +26,7 @@ const saveSutraThumbnail = async (buffer, mimetype) => {
   const id = randomUUID();
   const ext = mimetype === 'image/webp' ? 'webp' : 'jpg';
   const filename = `${id}.${ext}`;
-  const filepath = path.join(SUTRA_DIR, filename);
+  const filepath = path.join(SUTRA_THUMBS_DIR, filename);
 
   await sharp(buffer)
     .resize({ width: 800, withoutEnlargement: true })
