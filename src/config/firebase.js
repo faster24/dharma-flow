@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const admin = require('firebase-admin');
 
-const normalizeKey = (key) => key.replace(/\n/g, '\n').trim();
+const normalizeKey = (key) => key.replace(/\\n/g, '\n').trim();
 
 const loadCredentials = () => {
   const defaultPath = path.resolve(process.cwd(), 'firebase-service-account.json');
