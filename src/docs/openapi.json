@@ -24,6 +24,20 @@
         }
       }
     },
+    "/api/home": {
+      "get": {
+        "summary": "Get home feed",
+        "description": "Returns latest text sutra (featured) and 2 random audio sutras",
+        "tags": ["Home"],
+        "responses": {
+          "200": {
+            "description": "Home feed data",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/HomeResponse" } } }
+          },
+          "500": { "description": "Server error" }
+        }
+      }
+    },
     "/api/echo": {
       "post": {
         "summary": "Echo payload",
@@ -432,6 +446,7 @@
     "securitySchemes": { "bearerAuth": { "type": "http", "scheme": "bearer", "bearerFormat": "JWT" } },
     "schemas": {
       "HealthResponse": { "type": "object", "properties": { "status": { "type": "string", "example": "ok" }, "uptime": { "type": "number", "example": 12.34 } } },
+      "HomeResponse": { "type": "object", "properties": { "featuredTextSutra": { "oneOf": [{ "$ref": "#/components/schemas/Sutra" }, { "type": "null" }] }, "audioSutras": { "type": "array", "items": { "$ref": "#/components/schemas/Sutra" } } } },
       "EchoResponse": { "type": "object", "properties": { "data": { "type": "object", "additionalProperties": true }, "message": { "type": "string", "example": "echo" } } },
       "ProfileResponse": { "type": "object", "properties": { "authUser": { "type": "object", "additionalProperties": true }, "user": { "type": "object", "properties": { "uid": { "type": "string" }, "email": { "type": "string", "format": "email" }, "displayName": { "type": "string" }, "photoURL": { "type": "string" }, "username": { "type": "string" }, "birthday": { "type": "string", "format": "date" } }, "additionalProperties": true } } },
       "AuthRequest": { "type": "object", "required": ["email", "password", "username"], "properties": { "email": { "type": "string", "format": "email", "example": "user@example.com" }, "password": { "type": "string", "example": "secret123" }, "username": { "type": "string", "example": "myusername" }, "birthday": { "type": "string", "format": "date", "example": "2000-01-01" } } },

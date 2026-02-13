@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const auth = require('../middleware/auth');
 const { health, echo, profile } = require('../controllers/testController');
+const { getHome } = require('../controllers/homeController');
 const { register, login } = require('../controllers/authController');
 const { updateProfile } = require('../controllers/profileController');
 const upload = require('../middleware/upload');
@@ -15,6 +16,7 @@ const calendarRoutes = require('./calendar');
 const router = Router();
 
 router.get('/health', health);
+router.get('/home', getHome);
 router.post('/echo', echo);
 router.get('/profile', auth, profile);
 router.patch('/profile', auth, upload.single('image'), updateProfile);
