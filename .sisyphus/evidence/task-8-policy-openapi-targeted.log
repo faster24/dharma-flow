@@ -1,0 +1,18 @@
+COMMAND: pnpm vitest tests/policies.test.mjs tests/openapi.policies.test.mjs
+
+[1m[46m RUN [49m[22m [36mv4.0.18 [39m[90m/home/nyiyenaing/Work/DharmaFlow[39m
+
+ [32m✓[39m tests/openapi.policies.test.mjs [2m([22m[2m3 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+[0mGET /api/policies/privacy [32m200[0m 3.221 ms - 2932[0m
+[0mGET /api/policies/terms [32m200[0m 0.912 ms - 2634[0m
+[0mGET /api/policies/privacy?locale=fr-FR [32m200[0m 0.346 ms - 2932[0m
+[0mGET /api/policies/unknown [33m404[0m 1.218 ms - 23[0m
+ [32m✓[39m tests/policies.test.mjs [2m([22m[2m4 tests[22m[2m)[22m[32m 57[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m   Start at [22m 14:10:06
+[2m   Duration [22m 885ms[2m (transform 65ms, setup 0ms, import 669ms, tests 67ms, environment 0ms)[22m
+
+RESULT: PASS
+EXIT_CODE: 0

@@ -56,6 +56,13 @@ File uploads:
 - Swagger UI: `/api/docs`
 - OpenAPI spec: `/api/openapi.json`
 
+### Policy endpoints
+
+- Privacy policy: `GET /api/policies/privacy`
+- Terms of service: `GET /api/policies/terms`
+- Optional locale: `?locale=<bcp47>` (exact match under `locales`, otherwise deterministic fallback to `en-US`)
+- Intended use: treat these URLs as the canonical policy links for app-store submissions
+
 ## Docker (app + nginx)
 
 - Build & run: `docker-compose up --build`

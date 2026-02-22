@@ -9,6 +9,7 @@ const monkRoutes = require('./monks');
 const dharmaTalkRoutes = require('./dharmaTalks');
 const categoryRoutes = require('./categories');
 const sutraRoutes = require('./sutras');
+const policyRoutes = require('./policies');
 const { search } = require('../controllers/searchController');
 const favoriteRoutes = require('./favorites');
 const calendarRoutes = require('./calendar');
@@ -29,5 +30,6 @@ router.use('/monks', monkRoutes);
 router.use('/dharma-talks', dharmaTalkRoutes);
 router.use('/categories', categoryRoutes);
 router.use('/sutras', sutraRoutes);
+router.use('/policies', policyRoutes);
 
 module.exports = router;

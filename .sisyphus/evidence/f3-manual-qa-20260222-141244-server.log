@@ -1,0 +1,13 @@
+
+> dharmaflow-backend@1.0.0 start /home/nyiyenaing/Work/DharmaFlow
+> node server.js
+
+[dotenv@17.2.4] injecting env (8) from .env -- tip: ⚙️  suppress all logs with { quiet: true }
+✅ Connected to MongoDB Atlas
+✅ Firebase Admin initialized (source: /home/nyiyenaing/Work/DharmaFlow/dharma-flow-firebase-adminsdk-fbsvc-5b2a510c72.json)
+🚀 Server running on http://localhost:3000
+[0mGET /api/health [32m200[0m 2.239 ms - 36[0m
+[0mGET /api/policies/privacy?locale=fr-FR [32m200[0m 0.959 ms - 2932[0m
+[0mGET /api/policies/terms [32m200[0m 1.031 ms - 2634[0m
+[0mGET /api/policies/unknown [33m404[0m 0.744 ms - 23[0m
+ ELIFECYCLE  Command failed.
