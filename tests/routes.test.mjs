@@ -14,22 +14,22 @@ describe('API routes', () => {
     vi.restoreAllMocks();
   });
 
-  it('GET /api/health returns status ok', async () => {
-    const res = await request(app).get('/api/health');
+  it('GET /api/v1/health returns status ok', async () => {
+    const res = await request(app).get('/api/v1/health');
     expect(res.status).toBe(200);
     expect(res.body.status).toBe('ok');
     expect(typeof res.body.uptime).toBe('number');
   });
 
-  it('POST /api/echo echoes payload', async () => {
+  it('POST /api/v1/echo echoes payload', async () => {
     const payload = { hello: 'world' };
-    const res = await request(app).post('/api/echo').send(payload);
+    const res = await request(app).post('/api/v1/echo').send(payload);
     expect(res.status).toBe(200);
     expect(res.body.data).toEqual(payload);
     expect(res.body.message).toBe('echo');
   });
 
-  it('GET /api/profile returns user info when authorized', async () => {
+  it('GET /api/v1/profile returns user info when authorized', async () => {
     const stubUser = {
       uid: 'test-user',
       email: 'test@example.com',
@@ -40,7 +40,7 @@ describe('API routes', () => {
 
     vi.spyOn(User, 'findOne').mockResolvedValue(stubUser);
 
-    const res = await request(app).get('/api/profile');
+    const res = await request(app).get('/api/v1/profile');
 
     expect(res.status).toBe(200);
     expect(res.body.authUser.uid).toBe('test-user');

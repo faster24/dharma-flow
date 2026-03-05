@@ -33,8 +33,8 @@ describe('OpenAPI policy contract', () => {
   it('contains policy endpoints in documented paths', () => {
     const spec = JSON.parse(readFileSync(openApiPath, 'utf8'));
 
-    expect(spec.paths).toHaveProperty('/api/policies/privacy');
-    expect(spec.paths).toHaveProperty('/api/policies/terms');
+    expect(spec.paths).toHaveProperty('/api/v1/policies/privacy');
+    expect(spec.paths).toHaveProperty('/api/v1/policies/terms');
   });
 
   it('keeps PolicyDocument required keys aligned with policy contract', () => {

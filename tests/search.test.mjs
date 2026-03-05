@@ -18,7 +18,7 @@ describe('Search routes', () => {
     vi.restoreAllMocks();
   });
 
-  it('GET /api/search returns sutras and dharma talks', async () => {
+  it('GET /api/v1/search returns sutras and dharma talks', async () => {
     vi.spyOn(Sutra, 'find').mockReturnValue(chainResult([
       { _id: 's1', title: 'Heart Sutra', thumbnailUrl: '/t/s1.jpg', createdAt: new Date('2024-01-02') },
     ]));
@@ -35,7 +35,7 @@ describe('Search routes', () => {
     });
     vi.spyOn(DharmaTalk, 'countDocuments').mockResolvedValue(1);
 
-    const res = await request(app).get('/api/search').query({ q: 'dharma', page: 1, limit: 10 });
+    const res = await request(app).get('/api/v1/search').query({ q: 'dharma', page: 1, limit: 10 });
 
     expect(res.status).toBe(200);
     expect(res.body.total).toBe(2);
@@ -43,8 +43,8 @@ describe('Search routes', () => {
     expect(types).toEqual(['dharma', 'sutra']);
   });
 
-  it('GET /api/search 400 without q', async () => {
-    const res = await request(app).get('/api/search');
+  it('GET /api/v1/search 400 without q', async () => {
+    const res = await request(app).get('/api/v1/search');
     expect(res.status).toBe(400);
   });
 });

@@ -1,6 +1,6 @@
 # DharmaFlow Backend API
 
-Express API with MongoDB Atlas, Firebase Admin auth, OpenAPI docs, pnpm tooling, and basic routes (`/api/health`, `/api/echo`, `/api/profile`).
+Express API with MongoDB Atlas, Firebase Admin auth, OpenAPI docs, pnpm tooling, and basic routes (`/api/v1/health`, `/api/v1/echo`, `/api/v1/profile`).
 
 ## Firebase configuration
 
@@ -47,19 +47,19 @@ File uploads:
 ## Deploying to Vercel
 
 - Serverless entrypoint at `api/index.js` initializes MongoDB and Firebase once per cold start and reuses connections.
-- `vercel.json` rewrites `/` and `/api/*` to the serverless handler (Vercel’s default Node runtime is used; no custom runtime needed).
+- `vercel.json` rewrites `/` and `/api/v1/*` to the serverless handler (Vercel’s default Node runtime is used; no custom runtime needed).
 - Configure environment variables in Vercel project settings (match `.env`, and set `FIREBASE_CREDENTIALS_PATH` if you upload the service account file as a secret or bundle it). Do **not** commit real secrets.
 - Deploy via `vercel --prod` (or connect the GitHub repo and let Vercel auto-deploy on push).
 
 ## API docs
 
-- Swagger UI: `/api/docs`
-- OpenAPI spec: `/api/openapi.json`
+- Swagger UI: `/api/v1/docs`
+- OpenAPI spec: `/api/v1/openapi.json`
 
 ### Policy endpoints
 
-- Privacy policy: `GET /api/policies/privacy`
-- Terms of service: `GET /api/policies/terms`
+- Privacy policy: `GET /api/v1/policies/privacy`
+- Terms of service: `GET /api/v1/policies/terms`
 - Optional locale: `?locale=<bcp47>` (exact match under `locales`, otherwise deterministic fallback to `en-US`)
 - Intended use: treat these URLs as the canonical policy links for app-store submissions
 

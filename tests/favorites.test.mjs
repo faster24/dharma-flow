@@ -14,18 +14,18 @@ describe('Favorites routes', () => {
     vi.restoreAllMocks();
   });
 
-  it('POST /api/favorites/:id adds favorite', async () => {
+  it('POST /api/v1/favorites/:id adds favorite', async () => {
     vi.spyOn(User, 'findOne').mockResolvedValue({ _id: 'u1', uid: 'test-user' });
     vi.spyOn(Sutra, 'findById').mockResolvedValue({ _id: 's1' });
     vi.spyOn(Favorite, 'updateOne').mockResolvedValue({});
 
-    const res = await request(app).post('/api/favorites/s1');
+    const res = await request(app).post('/api/v1/favorites/s1');
 
     expect(res.status).toBe(200);
     expect(Favorite.updateOne).toHaveBeenCalled();
   });
 
-  it('GET /api/favorites lists favorites', async () => {
+  it('GET /api/v1/favorites lists favorites', async () => {
     vi.spyOn(User, 'findOne').mockResolvedValue({ _id: 'u1', uid: 'test-user' });
     vi.spyOn(Favorite, 'aggregate').mockImplementation((pipe) => {
       if (pipe.some((p) => p.$count)) return Promise.resolve([{ total: 1 }]);
@@ -34,7 +34,7 @@ describe('Favorites routes', () => {
       ]);
     });
 
-    const res = await request(app).get('/api/favorites');
+    const res = await request(app).get('/api/v1/favorites');
 
     expect(res.status).toBe(200);
     expect(res.body.items.length).toBe(1);

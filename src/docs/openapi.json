@@ -12,7 +12,7 @@
     }
   ],
   "paths": {
-    "/api/health": {
+    "/api/v1/health": {
       "get": {
         "summary": "Health check",
         "tags": ["Utility"],
@@ -24,7 +24,7 @@
         }
       }
     },
-    "/api/home": {
+    "/api/v1/home": {
       "get": {
         "summary": "Get home feed",
         "description": "Returns latest text sutra (featured) and 2 random audio sutras",
@@ -38,7 +38,7 @@
         }
       }
     },
-    "/api/echo": {
+    "/api/v1/echo": {
       "post": {
         "summary": "Echo payload",
         "tags": ["Utility"],
@@ -54,7 +54,7 @@
         }
       }
     },
-    "/api/policies/privacy": {
+    "/api/v1/policies/privacy": {
       "get": {
         "summary": "Get privacy policy",
         "tags": ["Policies"],
@@ -86,7 +86,7 @@
         }
       }
     },
-    "/api/policies/terms": {
+    "/api/v1/policies/terms": {
       "get": {
         "summary": "Get terms policy",
         "tags": ["Policies"],
@@ -118,7 +118,7 @@
         }
       }
     },
-    "/api/profile": {
+    "/api/v1/profile": {
       "get": {
         "summary": "Get authenticated profile",
         "description": "Returns the stored profile; 404 if missing.",
@@ -145,7 +145,7 @@
         }
       }
     },
-    "/api/auth/register": {
+    "/api/v1/auth/register": {
       "post": {
         "summary": "Register user via Firebase Auth and persist profile",
         "tags": ["Auth"],
@@ -158,7 +158,7 @@
         }
       }
     },
-    "/api/auth/login": {
+    "/api/v1/auth/login": {
       "post": {
         "summary": "Login user via Firebase Auth",
         "tags": ["Auth"],
@@ -170,7 +170,7 @@
         }
       }
     },
-    "/api/categories": {
+    "/api/v1/categories": {
       "get": {
         "summary": "List categories (public)",
         "tags": ["Categories"],
@@ -196,7 +196,7 @@
         }
       }
     },
-    "/api/categories/{id}": {
+    "/api/v1/categories/{id}": {
       "get": {
         "summary": "Get category (public)",
         "tags": ["Categories"],
@@ -229,7 +229,7 @@
         }
       }
     },
-    "/api/sutras": {
+    "/api/v1/sutras": {
       "get": {
         "summary": "List sutras (public)",
         "tags": ["Sutras"],
@@ -257,7 +257,7 @@
         }
       }
     },
-    "/api/sutras/{id}": {
+    "/api/v1/sutras/{id}": {
       "get": {
         "summary": "Get sutra (public)",
         "tags": ["Sutras"],
@@ -285,7 +285,7 @@
         "responses": { "200": { "description": "Deleted" }, "404": { "description": "Not found" }, "401": { "description": "Unauthorized" } }
       }
     },
-    "/api/monks": {
+    "/api/v1/monks": {
       "get": {
         "summary": "List monks (public)",
         "tags": ["Monks"],
@@ -304,7 +304,7 @@
         "responses": { "201": { "description": "Created" }, "400": { "description": "Invalid input" }, "409": { "description": "Duplicate" }, "401": { "description": "Unauthorized" } }
       }
     },
-    "/api/monks/{id}": {
+    "/api/v1/monks/{id}": {
       "get": {
         "summary": "Get monk (public)",
         "tags": ["Monks"],
@@ -328,7 +328,7 @@
         "responses": { "200": { "description": "Deleted or soft-deleted" }, "404": { "description": "Not found" }, "401": { "description": "Unauthorized" } }
       }
     },
-    "/api/dharma-talks": {
+    "/api/v1/dharma-talks": {
       "get": {
         "summary": "List dharma talks (public)",
         "tags": ["DharmaTalks"],
@@ -350,7 +350,7 @@
         "responses": { "201": { "description": "Created" }, "400": { "description": "Invalid input" }, "401": { "description": "Unauthorized" } }
       }
     },
-    "/api/dharma-talks/{id}": {
+    "/api/v1/dharma-talks/{id}": {
       "get": {
         "summary": "Get dharma talk (public)",
         "tags": ["DharmaTalks"],
@@ -373,7 +373,7 @@
         "responses": { "200": { "description": "Deleted" }, "404": { "description": "Not found" }, "401": { "description": "Unauthorized" } }
       }
     },
-    "/api/search": {
+    "/api/v1/search": {
       "get": {
         "summary": "Search sutras and dharma talks",
         "tags": ["Search"],
@@ -392,7 +392,7 @@
         }
       }
     },
-    "/api/favorites": {
+    "/api/v1/favorites": {
       "get": {
         "summary": "List favorites for current user",
         "tags": ["Favorites"],
@@ -434,7 +434,7 @@
         }
       }
     },
-    "/api/calendar": {
+    "/api/v1/calendar": {
       "get": {
         "summary": "Get calendar month",
         "description": "Returns all days in the requested month with marked boolean.",
@@ -450,7 +450,7 @@
         }
       }
     },
-    "/api/calendar/chant": {
+    "/api/v1/calendar/chant": {
       "post": {
         "summary": "Record chanting day",
         "description": "Idempotent upsert for a given date (YYYY-MM-DD).",
@@ -475,7 +475,7 @@
         }
       }
     },
-    "/api/calendar/streak": {
+    "/api/v1/calendar/streak": {
       "get": {
         "summary": "Get streak summary",
         "description": "Current streak is based on server today.",
@@ -489,7 +489,7 @@
         }
       }
     },
-    "/api/favorites/{id}": {
+    "/api/v1/favorites/{id}": {
       "post": {
         "summary": "Add favorite",
         "tags": ["Favorites"],

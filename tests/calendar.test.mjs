@@ -13,24 +13,24 @@ describe('Calendar routes', () => {
     vi.restoreAllMocks();
   });
 
-  it('POST /api/calendar/chant records a date', async () => {
+  it('POST /api/v1/calendar/chant records a date', async () => {
     vi.spyOn(User, 'findOne').mockResolvedValue({ _id: 'u1', uid: 'test-user' });
     vi.spyOn(ChantingLog, 'updateOne').mockResolvedValue({});
 
     const res = await request(app)
-      .post('/api/calendar/chant')
+      .post('/api/v1/calendar/chant')
       .send({ date: '2026-02-08' });
 
     expect(res.status).toBe(200);
     expect(res.body.recorded).toBe(true);
   });
 
-  it('GET /api/calendar returns month days', async () => {
+  it('GET /api/v1/calendar returns month days', async () => {
     vi.spyOn(User, 'findOne').mockResolvedValue({ _id: 'u1', uid: 'test-user' });
     vi.spyOn(ChantingLog, 'find').mockReturnValue({ select: () => Promise.resolve([{ date: '2026-02-02' }]) });
 
     const res = await request(app)
-      .get('/api/calendar')
+      .get('/api/v1/calendar')
       .query({ month: '2026-02' });
 
     expect(res.status).toBe(200);
@@ -38,11 +38,11 @@ describe('Calendar routes', () => {
     expect(res.body.days.some((d) => d.date === '2026-02-02' && d.marked)).toBe(true);
   });
 
-  it('GET /api/calendar/streak returns summary', async () => {
+  it('GET /api/v1/calendar/streak returns summary', async () => {
     vi.spyOn(User, 'findOne').mockResolvedValue({ _id: 'u1', uid: 'test-user' });
     vi.spyOn(ChantingLog, 'find').mockReturnValue({ select: () => Promise.resolve([{ date: '2026-02-07' }, { date: '2026-02-08' }]) });
 
-    const res = await request(app).get('/api/calendar/streak');
+    const res = await request(app).get('/api/v1/calendar/streak');
 
     expect(res.status).toBe(200);
     expect(res.body).toHaveProperty('currentStreak');

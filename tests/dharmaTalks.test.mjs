@@ -14,11 +14,11 @@ describe('Dharma talk routes', () => {
     vi.restoreAllMocks();
   });
 
-  it('POST /api/dharma-talks requires audio file', async () => {
+  it('POST /api/v1/dharma-talks requires audio file', async () => {
     vi.spyOn(Monk, 'findOne').mockResolvedValue({ _id: 'm1', isDeleted: false });
 
     const res = await request(app)
-      .post('/api/dharma-talks')
+      .post('/api/v1/dharma-talks')
       .field('monk', 'm1')
       .field('title', 'Talk')
       .field('duration', '300');
@@ -26,12 +26,12 @@ describe('Dharma talk routes', () => {
     expect(res.status).toBe(400);
   });
 
-  it('POST /api/dharma-talks creates talk when valid', async () => {
+  it('POST /api/v1/dharma-talks creates talk when valid', async () => {
     vi.spyOn(Monk, 'findOne').mockResolvedValue({ _id: 'm1', isDeleted: false });
     vi.spyOn(DharmaTalk, 'create').mockResolvedValue({ _id: 't1', title: 'Talk', audioUrl: '/storage/dharma-audio/x.mp3' });
 
     const res = await request(app)
-      .post('/api/dharma-talks')
+      .post('/api/v1/dharma-talks')
       .field('monk', 'm1')
       .field('title', 'Talk')
       .field('duration', '300')
@@ -42,12 +42,12 @@ describe('Dharma talk routes', () => {
     expect(DharmaTalk.create).toHaveBeenCalled();
   });
 
-  it('POST /api/dharma-talks preserves thumbnailUrl key and uploaded extension', async () => {
+  it('POST /api/v1/dharma-talks preserves thumbnailUrl key and uploaded extension', async () => {
     vi.spyOn(Monk, 'findOne').mockResolvedValue({ _id: 'm1', isDeleted: false });
     vi.spyOn(DharmaTalk, 'create').mockImplementation(async (payload) => ({ _id: 't2', ...payload }));
 
     const res = await request(app)
-      .post('/api/dharma-talks')
+      .post('/api/v1/dharma-talks')
       .field('monk', 'm1')
       .field('title', 'Extension Talk')
       .field('duration', '300')
@@ -66,12 +66,12 @@ describe('Dharma talk routes', () => {
     expect(res.body.talk.thumbnailUrl).toMatch(/^\/storage\/dharma-thumbs\/.+\.webp$/);
   });
 
-  it('POST /api/dharma-talks rejects spoofed thumbnail MIME with invalid bytes', async () => {
+  it('POST /api/v1/dharma-talks rejects spoofed thumbnail MIME with invalid bytes', async () => {
     vi.spyOn(Monk, 'findOne').mockResolvedValue({ _id: 'm1', isDeleted: false });
     vi.spyOn(DharmaTalk, 'create').mockResolvedValue({ _id: 't-invalid' });
 
     const res = await request(app)
-      .post('/api/dharma-talks')
+      .post('/api/v1/dharma-talks')
       .field('monk', 'm1')
       .field('title', 'Blocked Talk')
       .field('duration', '300')

@@ -49,8 +49,8 @@ const assertPolicyContract = (body, expectedType) => {
 };
 
 describe('Policy routes', () => {
-  it('GET /api/policies/privacy returns 200 with policy contract', async () => {
-    const res = await request(app).get('/api/policies/privacy');
+  it('GET /api/v1/policies/privacy returns 200 with policy contract', async () => {
+    const res = await request(app).get('/api/v1/policies/privacy');
 
     expect(res.status).toBe(200);
     assertPolicyContract(res.body, 'privacy');
@@ -58,8 +58,8 @@ describe('Policy routes', () => {
     expect(res.body.policy.title).toBe('Privacy Policy');
   });
 
-  it('GET /api/policies/terms returns 200 with policy contract', async () => {
-    const res = await request(app).get('/api/policies/terms');
+  it('GET /api/v1/policies/terms returns 200 with policy contract', async () => {
+    const res = await request(app).get('/api/v1/policies/terms');
 
     expect(res.status).toBe(200);
     assertPolicyContract(res.body, 'terms');
@@ -67,16 +67,16 @@ describe('Policy routes', () => {
     expect(res.body.policy.title).toBe('Terms of Service');
   });
 
-  it('GET /api/policies/privacy falls back to en-US for unsupported locale', async () => {
-    const res = await request(app).get('/api/policies/privacy?locale=fr-FR');
+  it('GET /api/v1/policies/privacy falls back to en-US for unsupported locale', async () => {
+    const res = await request(app).get('/api/v1/policies/privacy?locale=fr-FR');
 
     expect(res.status).toBe(200);
     expect(res.body.locale).toBe('en-US');
     expect(res.body.policy.locale).toBe('en-US');
   });
 
-  it('GET /api/policies/:unknown returns 404 with message', async () => {
-    const res = await request(app).get('/api/policies/unknown');
+  it('GET /api/v1/policies/:unknown returns 404 with message', async () => {
+    const res = await request(app).get('/api/v1/policies/unknown');
 
     expect(res.status).toBe(404);
     expect(res.body).toHaveProperty('message');

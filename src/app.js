@@ -42,9 +42,9 @@ app.use(morgan('dev'));
 
 app.use('/storage', express.static(STORAGE_ROOT));
 
-app.use('/api', routes);
-app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(apiSpec));
-app.get('/api/openapi.json', (req, res) => res.json(apiSpec));
+app.use('/api/v1', routes);
+app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(apiSpec));
+app.get('/api/v1/openapi.json', (req, res) => res.json(apiSpec));
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' });

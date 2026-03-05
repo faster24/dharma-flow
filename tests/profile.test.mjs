@@ -28,9 +28,9 @@ describe('Profile routes', () => {
     });
   });
 
-  it('PATCH /api/profile updates username and birthday', async () => {
+  it('PATCH /api/v1/profile updates username and birthday', async () => {
     const res = await request(app)
-      .patch('/api/profile')
+      .patch('/api/v1/profile')
       .send({ username: 'newname', birthday: '2000-01-01' });
 
     expect(res.status).toBe(200);
@@ -38,20 +38,20 @@ describe('Profile routes', () => {
     expect(User.findOneAndUpdate).toHaveBeenCalled();
   });
 
-  it('PATCH /api/profile returns 404 when user missing', async () => {
+  it('PATCH /api/v1/profile returns 404 when user missing', async () => {
     User.findOne.mockReset();
     User.findOne.mockResolvedValue(null);
     User.findOneAndUpdate.mockClear();
 
     const res = await request(app)
-      .patch('/api/profile')
+      .patch('/api/v1/profile')
       .send({ username: 'newname', birthday: '2000-01-01' });
 
     expect(res.status).toBe(404);
     expect(User.findOneAndUpdate).not.toHaveBeenCalled();
   });
 
-  it('PATCH /api/profile preserves photoURL key and uploaded extension', async () => {
+  it('PATCH /api/v1/profile preserves photoURL key and uploaded extension', async () => {
     User.findOne.mockReset();
     User.findOne
       .mockResolvedValueOnce({
@@ -70,7 +70,7 @@ describe('Profile routes', () => {
     }));
 
     const res = await request(app)
-      .patch('/api/profile')
+      .patch('/api/v1/profile')
       .attach('image', validJpegBytes, {
         filename: 'portrait.webp',
         contentType: 'image/jpeg',
@@ -81,7 +81,7 @@ describe('Profile routes', () => {
     expect(res.body.user.photoURL).toMatch(/^\/storage\/user-images\/.+\.webp$/);
   });
 
-  it('PATCH /api/profile rejects spoofed image MIME with invalid bytes', async () => {
+  it('PATCH /api/v1/profile rejects spoofed image MIME with invalid bytes', async () => {
     User.findOne.mockReset();
     User.findOne.mockResolvedValue({
       uid: 'test-user',
@@ -91,7 +91,7 @@ describe('Profile routes', () => {
     User.findOneAndUpdate.mockReset();
 
     const res = await request(app)
-      .patch('/api/profile')
+      .patch('/api/v1/profile')
       .attach('image', Buffer.from('not-an-image'), {
         filename: 'portrait.png',
         contentType: 'image/png',

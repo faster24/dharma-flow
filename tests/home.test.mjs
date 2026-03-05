@@ -11,7 +11,7 @@ describe('Home route', () => {
     vi.restoreAllMocks();
   });
 
-  it('GET /api/home returns latest text sutra and two audio sutras', async () => {
+  it('GET /api/v1/home returns latest text sutra and two audio sutras', async () => {
     const latestText = { _id: 't1', title: 'Latest Text', type: 'text' };
     const audioSutras = [
       { _id: 'a1', title: 'Audio 1', type: 'audio' },
@@ -23,7 +23,7 @@ describe('Home route', () => {
     });
     vi.spyOn(Sutra, 'aggregate').mockResolvedValue(audioSutras);
 
-    const res = await request(app).get('/api/home');
+    const res = await request(app).get('/api/v1/home');
 
     expect(res.status).toBe(200);
     expect(res.body.featuredTextSutra).toEqual(latestText);
