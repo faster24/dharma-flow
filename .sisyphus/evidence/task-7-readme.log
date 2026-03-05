@@ -1,0 +1,8 @@
+CMD: grep -n "Policy endpoints" README.md
+59:### Policy endpoints
+EXIT: 0
+
+CMD: grep -n "/api/policies/privacy" README.md
+61:- Privacy policy: `GET /api/policies/privacy`
+EXIT: 0
+

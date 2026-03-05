@@ -1,0 +1,4 @@
+CMD: grep -n "/api/policies/terms" README.md
+62:- Terms of service: `GET /api/policies/terms`
+EXIT: 0
+

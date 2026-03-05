@@ -1,0 +1,15 @@
+TASK: 8 acceptance verification (edge/guard scenario)
+TIMESTAMP: 2026-03-05
+WORKDIR: /home/nyiyenaing/Work/DharmaFlow-wt-privacy-policy-api
+COMMAND: node -e "const s=require('./src/docs/openapi.json'); if(!s.paths['/api/policies/privacy']) process.exit(2);" && pnpm vitest tests/policies.test.mjs tests/openapi.policies.test.mjs
+
+OUTPUT_SNIPPET:
+- OpenAPI precondition command exited without error (silent success)
+- tests/openapi.policies.test.mjs (3 tests) passed
+- tests/policies.test.mjs (4 tests) passed
+- Test Files 2 passed
+- Tests 7 passed
+
+GUARD_EXPECTATION: Missing OpenAPI policy path would stop sequence with non-zero exit before test execution.
+EXIT_CODE: 0
+RESULT: PASS
