@@ -1,0 +1,18 @@
+Task 3 acceptance verification - routes (non-error scenarios)
+Date: 2026-03-05
+
+Command:
+node -e "const r=require('./src/routes/policies'); if(!r) process.exit(1); console.log('ok')"
+
+Output snippet:
+ok
+EXIT_CODE:0
+
+Command:
+pnpm vitest tests/policies.test.mjs -t "GET /api/policies/privacy returns 200 with policy contract|GET /api/policies/terms returns 200 with policy contract"
+
+Output snippet:
+GET /api/policies/privacy 200
+GET /api/policies/terms 200
+Tests 2 passed | 2 skipped (4)
+EXIT_CODE:0

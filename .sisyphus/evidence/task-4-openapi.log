@@ -1,0 +1,5 @@
+COMMAND: node -e "const s=require('./src/docs/openapi.json'); if(!s.paths['/api/policies/privacy']||!s.paths['/api/policies/terms']) process.exit(1); console.log('ok')"
+RESULT:
+ok
+EXIT_CODE: 0
+PASS: yes

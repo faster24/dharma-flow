@@ -1,0 +1,9 @@
+COMMAND: node -e "const p=require('./src/content/policies.json'); const req=['title','version','effectiveDate','lastUpdated','locale','summary','contentFormat','content','contactEmail','contactUrl','dataDeletionUrl','platformCompliance']; for (const k of ['privacy','terms']) { if(!p[k]) process.exit(1); for (const f of req){ if(!p[k][f]) process.exit(1);} } console.log('ok')"
+ok
+RESULT: PASS
+EXIT_CODE: 0
+
+COMMAND: node -e "const p=require('./src/content/policies.json'); if(p.privacy.locale!=='en-US'||p.terms.locale!=='en-US') process.exit(1); console.log('ok')"
+ok
+RESULT: PASS
+EXIT_CODE: 0

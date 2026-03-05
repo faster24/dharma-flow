@@ -1,0 +1,5 @@
+COMMAND: node -e "const fs=require('fs'); JSON.parse(fs.readFileSync('./src/docs/openapi.json','utf8')); console.log('valid-json')"
+RESULT:
+valid-json
+EXIT_CODE: 0
+PASS: yes

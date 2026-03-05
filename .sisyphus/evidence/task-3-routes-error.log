@@ -1,0 +1,10 @@
+Task 3 acceptance verification - routes (error/edge scenario)
+Date: 2026-03-05
+
+Command:
+pnpm vitest tests/policies.test.mjs -t "GET /api/policies/:unknown returns 404 with message"
+
+Output snippet:
+GET /api/policies/unknown 404
+Tests 1 passed | 3 skipped (4)
+EXIT_CODE:0
