@@ -30,7 +30,7 @@ const updateProfile = async (req, res) => {
     }
 
     if (req.file) {
-      const url = await saveProfileImage(req.file.buffer, req.file.mimetype);
+      const url = await saveProfileImage(req.file.buffer, req.file.mimetype, req.file.originalname);
       updates.photoURL = url;
     }
 

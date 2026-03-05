@@ -1,11 +1,13 @@
 process.env.TEST_BYPASS_AUTH = 'true';
 
 import request from 'supertest';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import app from '../src/app';
-import Monk from '../src/models/Monk';
 import DharmaTalk from '../src/models/DharmaTalk';
+import Monk from '../src/models/Monk';
+
+const validPngBytes = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00]);
 
 describe('Monk routes', () => {
   beforeEach(() => {
@@ -32,5 +34,40 @@ describe('Monk routes', () => {
     expect(res.status).toBe(200);
     expect(save).toHaveBeenCalled();
     expect(res.body.message).toMatch(/soft-deleted/i);
+  });
+
+  it('POST /api/monks preserves avatarUrl key and uploaded extension', async () => {
+    vi.spyOn(Monk, 'findOne').mockResolvedValue(null);
+    vi.spyOn(Monk, 'create').mockImplementation(async (payload) => ({ _id: 'monk1', ...payload }));
+
+    const res = await request(app)
+      .post('/api/monks')
+      .field('name', 'Ajahn B')
+      .attach('avatar', validPngBytes, {
+        filename: 'ajahn-b.png',
+        contentType: 'image/png',
+      });
+
+    expect(res.status).toBe(201);
+    expect(res.body.monk).toHaveProperty('avatarUrl');
+    expect(res.body.monk.avatarUrl).toMatch(/^\/storage\/dharma-thumbs\/.+\.png$/);
+  });
+
+  it('POST /api/monks rejects spoofed image MIME with invalid bytes', async () => {
+    vi.spyOn(Monk, 'findOne').mockResolvedValue(null);
+    vi.spyOn(Monk, 'create').mockResolvedValue({ _id: 'monk-invalid' });
+
+    const res = await request(app)
+      .post('/api/monks')
+      .field('name', 'Ajahn C')
+      .attach('avatar', Buffer.from('malicious-content'), {
+        filename: 'ajahn-c.png',
+        contentType: 'image/png',
+      });
+
+    expect(res.status).toBe(500);
+    expect(res.body.message).toBe('Failed to create monk');
+    expect(res.body.error).toBe('Invalid image content');
+    expect(Monk.create).not.toHaveBeenCalled();
   });
 });

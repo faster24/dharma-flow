@@ -48,7 +48,7 @@ const createSutra = async (req, res) => {
     let audioUrl;
 
     if (thumbFile) {
-      thumbnailUrl = await saveSutraThumbnail(thumbFile.buffer, thumbFile.mimetype);
+      thumbnailUrl = await saveSutraThumbnail(thumbFile.buffer, thumbFile.mimetype, thumbFile.originalname);
     }
 
     if (audioFile) {
@@ -133,7 +133,7 @@ const updateSutra = async (req, res) => {
     const audioFile = req.files?.audio?.[0];
 
     if (thumbFile) {
-      const url = await saveSutraThumbnail(thumbFile.buffer, thumbFile.mimetype);
+      const url = await saveSutraThumbnail(thumbFile.buffer, thumbFile.mimetype, thumbFile.originalname);
       sutra.thumbnailUrl = url;
     }
 
