@@ -1,0 +1,30 @@
+Task 5 acceptance verification evidence
+Workdir: /home/nyiyenaing/Work/DharmaFlow-wt-privacy-policy-api
+
+[Command 1]
+pnpm vitest tests/policies.test.mjs
+Exit code: 0
+Output snippet:
+- RUN v4.0.18 /home/nyiyenaing/Work/DharmaFlow-wt-privacy-policy-api
+- GET /api/policies/privacy 200
+- GET /api/policies/terms 200
+- GET /api/policies/privacy?locale=fr-FR 200
+- GET /api/policies/unknown 404
+- tests/policies.test.mjs (4 tests)
+- Test Files 1 passed
+- Tests 4 passed
+
+[Command 2 - output inspection for assertion coverage]
+pnpm vitest tests/policies.test.mjs --reporter=verbose
+Exit code: 0
+Output snippet:
+- GET /api/policies/privacy returns 200 with policy contract
+- GET /api/policies/terms returns 200 with policy contract
+- GET /api/policies/privacy falls back to en-US for unsupported locale
+- GET /api/policies/:unknown returns 404 with message
+
+Acceptance markers:
+- AC280_EXIT_CODE=0
+- AC281_ASSERTION_KEYS_COVERED=privacy/terms policy contract
+- AC281_LOCALE_FALLBACK_COVERED=en-US fallback for unsupported locale
+- AC281_REQUIRED_KEYS=locale,policy.type,policy.title,policy.version,policy.effectiveDate,policy.lastUpdated,policy.locale,policy.summary,policy.contentFormat,policy.content,policy.contactEmail,policy.contactUrl,policy.dataDeletionUrl,policy.platformCompliance.googlePlay,policy.platformCompliance.appleAppStore
