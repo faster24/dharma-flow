@@ -1,0 +1,19 @@
+Task 5 edge/negative verification evidence
+Workdir: /home/nyiyenaing/Work/DharmaFlow-wt-privacy-policy-api
+
+[Command]
+pnpm test -- --run -t "unsupported|invalid image"
+Exit code: 0
+Output snippet:
+- vitest -- --run -t 'unsupported|invalid image'
+- Test Files 13 passed
+- Tests 32 passed
+- tests/policies.test.mjs (4 tests)
+
+Applicability note:
+- This selector is not specific to Task 5 policy routes. It targets image-validation naming patterns and therefore executes a broader suite in this repository instead of isolating policy-only edge assertions.
+- Task 5 plan edge scenario for policy coverage remains: `pnpm vitest tests/policies.test.mjs -t "unknown returns 404"`.
+
+Edge marker:
+- EDGE_SELECTOR_EXECUTED=unsupported|invalid image
+- EDGE_SELECTOR_NON_APPLICABLE_TO_POLICY_ONLY=true

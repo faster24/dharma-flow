@@ -1,0 +1,4 @@
+COMMAND: node -e "const p=require('./src/content/policies.json'); delete p.privacy.version; const req=['title','version']; for (const f of req){ if(!p.privacy[f]) { console.log('missing'); process.exit(2);} }"
+missing
+RESULT: PASS
+EXIT_CODE: 2

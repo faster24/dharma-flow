@@ -4,13 +4,12 @@ const sharp = require('sharp');
 const path = require('path');
 const fs = require('fs');
 const { randomUUID } = require('crypto');
-
-const AVATAR_DIR = path.join(process.cwd(), 'public', 'storage', 'dharma-thumbs');
+const { DHARMA_THUMBS_DIR } = require('../config/storage');
 
 const saveAvatar = async (file) => {
   const ext = file.mimetype === 'image/webp' ? 'webp' : 'jpg';
   const filename = `${randomUUID()}.${ext}`;
-  const filepath = path.join(AVATAR_DIR, filename);
+  const filepath = path.join(DHARMA_THUMBS_DIR, filename);
   await sharp(file.buffer)
     .resize({ width: 800, withoutEnlargement: true })
     .toFormat(ext === 'webp' ? 'webp' : 'jpeg', { quality: 80 })

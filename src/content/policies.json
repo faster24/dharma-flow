@@ -1,0 +1,38 @@
+{
+  "privacy": {
+    "type": "privacy",
+    "title": "Privacy Policy",
+    "version": "1.0",
+    "effectiveDate": "2026-02-22",
+    "lastUpdated": "2026-02-22",
+    "locale": "en-US",
+    "summary": "DharmaFlow collects only the data needed to run the app, keep accounts secure, and improve reliability. You can request deletion of your account data at any time.",
+    "contentFormat": "markdown",
+    "content": "# Privacy Policy\n\nThis Privacy Policy explains how DharmaFlow collects, uses, and shares information when you use the app and related services.\n\n## Information we collect\n\nWe collect the following types of information:\n\n- Account information: your Firebase user ID, email address, and basic profile fields you provide (such as username, birthday, and profile photo).\n- App usage and diagnostics: basic logs needed to operate and secure the service (for example, request metadata and error logs).\n- Content you create: any profile content you submit through the app.\n\nWe do not sell your personal information.\n\n## How we use information\n\nWe use information to:\n\n- Provide and maintain the service, including account authentication and profile features.\n- Prevent abuse, troubleshoot issues, and improve performance and reliability.\n- Communicate with you about support requests, policy updates, and important service notices.\n\n## How we share information\n\nWe share information only as needed to run the service:\n\n- Service providers: hosting, database, and authentication services (for example, MongoDB Atlas and Firebase) that process data on our behalf.\n- Legal and safety: if required by law, or to protect users, our service, and our rights.\n\n## Data retention\n\nWe keep personal information for as long as your account is active and as needed to provide the service. We may retain limited logs for security and troubleshooting for a reasonable period.\n\n## Your choices and rights\n\nDepending on where you live, you may have rights to access, correct, or delete your information. You can request deletion using the link below or by contacting us.\n\n## Security\n\nWe use reasonable safeguards designed to protect information from unauthorized access, alteration, or loss. No method of transmission or storage is completely secure.\n\n## Changes\n\nWe may update this policy. If we make material changes, we will update the date above and may provide in-app notice.\n\n## Contact\n\nIf you have questions or requests about this Privacy Policy, contact us at the email or URL below.\n",
+    "contactEmail": "support@dharmaflow.app",
+    "contactUrl": "https://dharmaflow.app/support",
+    "dataDeletionUrl": "https://dharmaflow.app/data-deletion",
+    "platformCompliance": {
+      "googlePlay": "Includes a clear description of data collection, use, and sharing, provides a contact method, and offers an account/data deletion path.",
+      "appleAppStore": "Explains data practices in plain language, includes support contact, and supports user requests to delete account data."
+    }
+  },
+  "terms": {
+    "type": "terms",
+    "title": "Terms of Service",
+    "version": "1.0",
+    "effectiveDate": "2026-02-22",
+    "lastUpdated": "2026-02-22",
+    "locale": "en-US",
+    "summary": "These terms describe the rules for using DharmaFlow, including account responsibilities, acceptable use, and how the service may change.",
+    "contentFormat": "markdown",
+    "content": "# Terms of Service\n\nThese Terms of Service govern your use of DharmaFlow. By using the app, you agree to these terms.\n\n## Who can use the app\n\nYou must follow applicable laws and the rules in these terms. If you are under the age required to consent to online services where you live, a parent or guardian must consent on your behalf.\n\n## Accounts and security\n\n- You are responsible for the activity on your account.\n- Keep your sign-in credentials secure and tell us if you believe your account was compromised.\n- We may suspend or terminate accounts that violate these terms.\n\n## Acceptable use\n\nYou agree not to:\n\n- Break the law or encourage others to do so.\n- Attempt to access or interfere with the service, other users, or our systems.\n- Upload or share content that is unlawful, harmful, or infringes the rights of others.\n\n## Content and intellectual property\n\nThe app and its branding, code, and design belong to DharmaFlow or its licensors. You keep rights to your profile content, but you grant us permission to host and display it as needed to provide the service.\n\n## Changes and availability\n\nWe may add, remove, or change features, and we may stop providing the service at any time. We will try to provide notice when changes are significant.\n\n## Disclaimers\n\nThe service is provided \"as is\" without warranties of any kind to the extent permitted by law.\n\n## Limitation of liability\n\nTo the extent permitted by law, DharmaFlow is not liable for indirect, incidental, special, consequential, or punitive damages, or any loss of data, revenue, or profits.\n\n## Termination\n\nYou can stop using the app at any time. We may suspend or terminate your access if you violate these terms or if required for safety or legal reasons.\n\n## Contact\n\nQuestions about these terms can be sent to the email or URL below.\n",
+    "contactEmail": "support@dharmaflow.app",
+    "contactUrl": "https://dharmaflow.app/support",
+    "dataDeletionUrl": "https://dharmaflow.app/data-deletion",
+    "platformCompliance": {
+      "googlePlay": "States the basic rules of use, explains account responsibility and termination, and provides a support contact.",
+      "appleAppStore": "Provides user-facing terms for account usage and acceptable conduct, includes support contact and a deletion request path."
+    }
+  }
+}

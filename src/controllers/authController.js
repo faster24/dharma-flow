@@ -1,14 +1,9 @@
 const User = require('../models/User');
+const { parseBirthday } = require('../utils/validation');
 let authService = require('../services/firebaseAuth');
 
 const setAuthService = (svc) => {
   authService = svc;
-};
-
-const parseBirthday = (birthday) => {
-  if (!birthday) return undefined;
-  const date = new Date(birthday);
-  return Number.isNaN(date.getTime()) ? null : date;
 };
 
 const ensureCredentials = (req, res) => {

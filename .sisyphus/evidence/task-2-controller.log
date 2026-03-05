@@ -1,0 +1,19 @@
+TASK 2 ACCEPTANCE VERIFICATION
+WORKDIR /home/nyiyenaing/Work/DharmaFlow-wt-privacy-policy-api
+
+COMMAND node -e "const c=require('./src/controllers/policyController'); if(typeof c.getPrivacyPolicy!=='function'||typeof c.getTermsPolicy!=='function') process.exit(1); console.log('ok')"
+OUTPUT
+ok
+RESULT export_check
+EXIT_CODE 0
+PASS handler-export-check
+
+COMMAND pnpm test -- tests/policies.test.mjs -t "falls back to en-US for unsupported locale"
+OUTPUT_SNIPPET
+GET /api/policies/privacy?locale=fr-FR 200
+tests/policies.test.mjs (4 tests)
+Test Files 13 passed (13)
+Tests 32 passed (32)
+RESULT fallback_test
+EXIT_CODE 0
+PASS fallback-to-en-US

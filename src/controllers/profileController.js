@@ -1,11 +1,6 @@
 const User = require('../models/User');
 const { saveProfileImage } = require('../services/imageService');
-
-const parseBirthday = (birthday) => {
-  if (!birthday) return undefined;
-  const date = new Date(birthday);
-  return Number.isNaN(date.getTime()) ? null : date;
-};
+const { parseBirthday } = require('../utils/validation');
 
 const updateProfile = async (req, res) => {
   const { username, birthday } = req.body || {};

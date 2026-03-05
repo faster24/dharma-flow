@@ -8,20 +8,30 @@ const apiSpec = require('./docs/openapi.json');
 const routes = require('./routes');
 const path = require('path');
 const fs = require('fs');
+const {
+  STORAGE_ROOT,
+  USER_IMAGES_DIR,
+  SUTRA_THUMBS_DIR,
+  SUTRA_AUDIO_DIR,
+  DHARMA_THUMBS_DIR,
+  DHARMA_AUDIO_DIR,
+} = require('./config/storage');
 
 const app = express();
 
-// ensure public storage path exists
-const storageDir = path.join(process.cwd(), 'public', 'storage', 'user-images');
-fs.mkdirSync(storageDir, { recursive: true });
-const sutraThumbDir = path.join(process.cwd(), 'public', 'storage', 'sutra-thumbs');
-fs.mkdirSync(sutraThumbDir, { recursive: true });
-const sutraAudioDir = path.join(process.cwd(), 'public', 'storage', 'sutra-audio');
-fs.mkdirSync(sutraAudioDir, { recursive: true });
-const dharmaThumbDir = path.join(process.cwd(), 'public', 'storage', 'dharma-thumbs');
-fs.mkdirSync(dharmaThumbDir, { recursive: true });
-const dharmaAudioDir = path.join(process.cwd(), 'public', 'storage', 'dharma-audio');
-fs.mkdirSync(dharmaAudioDir, { recursive: true });
+// ensure storage paths exist (use /tmp on serverless)
+const ensureDir = (dir) => {
+  try {
+    fs.mkdirSync(dir, { recursive: true });
+  } catch (err) {
+    console.warn(`Storage directory unavailable: ${dir}`, err.message);
+  }
+};
+ensureDir(USER_IMAGES_DIR);
+ensureDir(SUTRA_THUMBS_DIR);
+ensureDir(SUTRA_AUDIO_DIR);
+ensureDir(DHARMA_THUMBS_DIR);
+ensureDir(DHARMA_AUDIO_DIR);
 
 app.use(helmet());
 app.use(cors());
@@ -30,7 +40,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(morgan('dev'));
 
-app.use('/storage', express.static(path.join(process.cwd(), 'public', 'storage')));
+app.use('/storage', express.static(STORAGE_ROOT));
 
 app.use('/api', routes);
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(apiSpec));

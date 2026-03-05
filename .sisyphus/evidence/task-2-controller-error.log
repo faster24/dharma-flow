@@ -1,0 +1,9 @@
+TASK 2 EDGE VERIFICATION
+WORKDIR /home/nyiyenaing/Work/DharmaFlow-wt-privacy-policy-api
+
+COMMAND node -e "const fs=require('fs'); const raw=fs.readFileSync('./src/content/policies.json','utf8'); try { JSON.parse(raw.slice(0,10)); } catch { console.log('parse-error'); process.exit(2);} "
+OUTPUT
+parse-error
+RESULT malformed_source_check
+EXIT_CODE 2
+PASS malformed-source-nonzero

@@ -4,19 +4,13 @@ const sharp = require('sharp');
 const { randomUUID } = require('crypto');
 const Monk = require('../models/Monk');
 const DharmaTalk = require('../models/DharmaTalk');
-
-const THUMB_DIR = path.join(process.cwd(), 'public', 'storage', 'dharma-thumbs');
-const AUDIO_DIR = path.join(process.cwd(), 'public', 'storage', 'dharma-audio');
-
-const normalizeTags = (tags) =>
-  Array.isArray(tags)
-    ? tags.map((t) => (t || '').toString().trim().toLowerCase()).filter(Boolean)
-    : [];
+const { DHARMA_THUMBS_DIR, DHARMA_AUDIO_DIR } = require('../config/storage');
+const { normalizeTags } = require('../utils/validation');
 
 const saveThumb = async (file) => {
   const ext = file.mimetype === 'image/webp' ? 'webp' : 'jpg';
   const filename = `${randomUUID()}.${ext}`;
-  const filepath = path.join(THUMB_DIR, filename);
+  const filepath = path.join(DHARMA_THUMBS_DIR, filename);
   await sharp(file.buffer)
     .resize({ width: 800, withoutEnlargement: true })
     .toFormat(ext === 'webp' ? 'webp' : 'jpeg', { quality: 80 })
@@ -39,7 +33,7 @@ const saveAudio = (file) => {
   if (process.env.TEST_NO_WRITE === 'true') {
     return `/storage/dharma-audio/${filename}`;
   }
-  const filepath = path.join(AUDIO_DIR, filename);
+  const filepath = path.join(DHARMA_AUDIO_DIR, filename);
   fs.writeFileSync(filepath, file.buffer);
   return `/storage/dharma-audio/${filename}`;
 };
