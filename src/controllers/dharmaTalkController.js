@@ -1,22 +1,11 @@
-const path = require('path');
-const fs = require('fs');
-const sharp = require('sharp');
-const { randomUUID } = require('crypto');
+const path = require('node:path');
+const fs = require('node:fs');
+const { randomUUID } = require('node:crypto');
 const Monk = require('../models/Monk');
 const DharmaTalk = require('../models/DharmaTalk');
-const { DHARMA_THUMBS_DIR, DHARMA_AUDIO_DIR } = require('../config/storage');
+const { DHARMA_AUDIO_DIR } = require('../config/storage');
+const { saveDharmaThumbnail } = require('../services/imageService');
 const { normalizeTags } = require('../utils/validation');
-
-const saveThumb = async (file) => {
-  const ext = file.mimetype === 'image/webp' ? 'webp' : 'jpg';
-  const filename = `${randomUUID()}.${ext}`;
-  const filepath = path.join(DHARMA_THUMBS_DIR, filename);
-  await sharp(file.buffer)
-    .resize({ width: 800, withoutEnlargement: true })
-    .toFormat(ext === 'webp' ? 'webp' : 'jpeg', { quality: 80 })
-    .toFile(filepath);
-  return `/storage/dharma-thumbs/${filename}`;
-};
 
 const saveAudio = (file) => {
   const extMap = {
@@ -55,7 +44,9 @@ const createTalk = async (req, res) => {
     const audioFile = req.files?.audio?.[0];
     if (!audioFile) return res.status(400).json({ message: 'audio file is required' });
 
-    const thumbnailUrl = thumbFile ? await saveThumb(thumbFile) : undefined;
+    const thumbnailUrl = thumbFile
+      ? await saveDharmaThumbnail(thumbFile.buffer, thumbFile.mimetype, thumbFile.originalname)
+      : undefined;
     const audioUrl = saveAudio(audioFile);
 
     const talk = await DharmaTalk.create({
@@ -140,7 +131,9 @@ const updateTalk = async (req, res) => {
     const thumbFile = req.files?.thumbnail?.[0];
     const audioFile = req.files?.audio?.[0];
 
-    if (thumbFile) talk.thumbnailUrl = await saveThumb(thumbFile);
+    if (thumbFile) {
+      talk.thumbnailUrl = await saveDharmaThumbnail(thumbFile.buffer, thumbFile.mimetype, thumbFile.originalname);
+    }
     if (audioFile) talk.audioUrl = saveAudio(audioFile);
 
     await talk.save();

@@ -1,21 +1,6 @@
 const Monk = require('../models/Monk');
 const DharmaTalk = require('../models/DharmaTalk');
-const sharp = require('sharp');
-const path = require('path');
-const fs = require('fs');
-const { randomUUID } = require('crypto');
-const { DHARMA_THUMBS_DIR } = require('../config/storage');
-
-const saveAvatar = async (file) => {
-  const ext = file.mimetype === 'image/webp' ? 'webp' : 'jpg';
-  const filename = `${randomUUID()}.${ext}`;
-  const filepath = path.join(DHARMA_THUMBS_DIR, filename);
-  await sharp(file.buffer)
-    .resize({ width: 800, withoutEnlargement: true })
-    .toFormat(ext === 'webp' ? 'webp' : 'jpeg', { quality: 80 })
-    .toFile(filepath);
-  return `/storage/dharma-thumbs/${filename}`;
-};
+const { saveDharmaThumbnail } = require('../services/imageService');
 
 const createMonk = async (req, res) => {
   try {
@@ -28,7 +13,7 @@ const createMonk = async (req, res) => {
     let avatarUrl;
     const avatarFile = req.files?.thumbnail?.[0] || req.files?.avatar?.[0];
     if (avatarFile) {
-      avatarUrl = await saveAvatar(avatarFile);
+      avatarUrl = await saveDharmaThumbnail(avatarFile.buffer, avatarFile.mimetype, avatarFile.originalname);
     }
 
     const monk = await Monk.create({ name: name.trim(), bio, avatarUrl });
@@ -71,7 +56,7 @@ const updateMonk = async (req, res) => {
   if (bio !== undefined) monk.bio = bio;
 
   const avatarFile = req.files?.thumbnail?.[0] || req.files?.avatar?.[0];
-  if (avatarFile) monk.avatarUrl = await saveAvatar(avatarFile);
+  if (avatarFile) monk.avatarUrl = await saveDharmaThumbnail(avatarFile.buffer, avatarFile.mimetype, avatarFile.originalname);
 
   await monk.save();
   res.json({ monk });
