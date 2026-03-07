@@ -149,9 +149,9 @@
       "post": {
         "summary": "Register user via Firebase Auth and persist profile",
         "tags": ["Auth"],
-        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AuthRequest" } } } },
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/RegisterAuthRequest" } } } },
         "responses": {
-          "200": { "description": "Registration success", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AuthResponse" } } } },
+          "200": { "description": "Registration success", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/RegisterAuthResponse" } } } },
           "400": { "description": "Invalid input" },
           "409": { "description": "Username conflict" },
           "500": { "description": "Server error" }
@@ -162,9 +162,9 @@
       "post": {
         "summary": "Login user via Firebase Auth",
         "tags": ["Auth"],
-        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AuthRequest" } } } },
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/LoginAuthRequest" } } } },
         "responses": {
-          "200": { "description": "Login success", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AuthResponse" } } } },
+          "200": { "description": "Login success", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/LoginAuthResponse" } } } },
           "400": { "description": "Invalid input" },
           "500": { "description": "Server error" }
         }
@@ -540,8 +540,10 @@
         "required": ["type", "title", "version", "effectiveDate", "lastUpdated", "locale", "summary", "contentFormat", "content", "contactEmail", "contactUrl", "dataDeletionUrl", "platformCompliance"]
       },
       "ProfileResponse": { "type": "object", "properties": { "authUser": { "type": "object", "additionalProperties": true }, "user": { "type": "object", "properties": { "uid": { "type": "string" }, "email": { "type": "string", "format": "email" }, "displayName": { "type": "string" }, "photoURL": { "type": "string" }, "username": { "type": "string" }, "birthday": { "type": "string", "format": "date" } }, "additionalProperties": true } } },
-      "AuthRequest": { "type": "object", "required": ["email", "password", "username"], "properties": { "email": { "type": "string", "format": "email", "example": "user@example.com" }, "password": { "type": "string", "example": "secret123" }, "username": { "type": "string", "example": "myusername" }, "birthday": { "type": "string", "format": "date", "example": "2000-01-01" } } },
-      "AuthResponse": { "type": "object", "properties": { "uid": { "type": "string", "example": "firebase-uid" }, "idToken": { "type": "string", "description": "JWT for authenticated calls" }, "refreshToken": { "type": "string" }, "email": { "type": "string", "format": "email" }, "username": { "type": "string" }, "birthday": { "type": "string", "format": "date" } } },
+      "RegisterAuthRequest": { "type": "object", "required": ["email", "password", "username"], "properties": { "email": { "type": "string", "format": "email", "example": "user@example.com" }, "password": { "type": "string", "example": "secret123" }, "username": { "type": "string", "example": "myusername" }, "birthday": { "type": "string", "format": "date", "example": "2000-01-01" } } },
+      "LoginAuthRequest": { "type": "object", "required": ["email", "password"], "properties": { "email": { "type": "string", "format": "email", "example": "user@example.com" }, "password": { "type": "string", "example": "secret123" } } },
+      "RegisterAuthResponse": { "type": "object", "properties": { "uid": { "type": "string", "example": "firebase-uid" }, "idToken": { "type": "string", "description": "JWT for authenticated calls" }, "refreshToken": { "type": "string" }, "email": { "type": "string", "format": "email" }, "username": { "type": "string" }, "birthday": { "type": "string", "format": "date" } } },
+      "LoginAuthResponse": { "type": "object", "properties": { "uid": { "type": "string", "example": "firebase-uid" }, "idToken": { "type": "string", "description": "JWT for authenticated calls" }, "refreshToken": { "type": "string" }, "email": { "type": "string", "format": "email" } } },
       "ProfileUpdateRequest": { "type": "object", "properties": { "username": { "type": "string", "example": "newname" }, "birthday": { "type": "string", "format": "date", "example": "2000-01-01" }, "image": { "type": "string", "format": "binary" } } },
       "Category": { "type": "object", "properties": { "_id": { "type": "string" }, "name": { "type": "string" }, "description": { "type": "string" }, "isDeleted": { "type": "boolean" } } },
       "CategoryCreate": { "type": "object", "required": ["name"], "properties": { "name": { "type": "string" }, "description": { "type": "string" } } },
